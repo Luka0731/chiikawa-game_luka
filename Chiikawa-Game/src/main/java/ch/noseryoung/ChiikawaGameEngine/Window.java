@@ -64,6 +64,11 @@ public class Window {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
 
+        // lambda expressions, so GLFW can implement its code here
+        glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
+        glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
+        glfwSetScrollCallback(glfwWindow, MouseListener::scrollCallback);
+
         // make OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
         // enable v-sync (refresh rate as fast as the monitor, not waiting)
