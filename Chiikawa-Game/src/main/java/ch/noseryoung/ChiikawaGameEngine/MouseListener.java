@@ -20,15 +20,15 @@ public class MouseListener {
         this.lastX = 0.0;
     }
 
-
-    // |--- callbacks ---|
-
     public static MouseListener getMouseListener() {
         if (MouseListener.mouseListener == null) {
             MouseListener.mouseListener = new MouseListener();
         }
         return MouseListener.mouseListener;
     }
+
+
+    // |--- callbacks ---|
 
     public static void mousePosCallback(long window, double xPos, double yPos)
     {
@@ -106,8 +106,8 @@ public class MouseListener {
     public static boolean isMouseButtonDown(int button) {
         if (button < getMouseListener().mouseButtonPressed.length) {
             return getMouseListener().mouseButtonPressed[button];
-        } else {
-            return false;
         }
+        System.err.println("MouseListener ERROR: Button index " + button + " is out of bounds!");
+        return false;
     }
 }
