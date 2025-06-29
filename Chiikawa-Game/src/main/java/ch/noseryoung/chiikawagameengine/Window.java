@@ -1,5 +1,6 @@
-package ch.noseryoung.ChiikawaGameEngine;
+package ch.noseryoung.chiikawagameengine;
 
+import ch.noseryoung.util.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -17,11 +18,32 @@ public class Window {
     String title;
     private static Window window = null; // singleton
     private long glfwWindow; // the memory space location of the window (pointer)
+    private static Scene currentScene = null;
+    public float r, g, b, a;
 
     private Window() {
         this.width = 1920;
         this.height = 1080;
         this.title = "Chiikawa Game!";
+        this.r = 1;
+        this.g = 1;
+        this.b = 1;
+        this.a = 1;
+    }
+
+    public static void changeScene(int newScene) {
+        switch (newScene) {
+            case 0:
+                currentScene = new RoomEditorScene();
+                currentScene.init();
+                break;
+            case 1:
+                currentScene = new RoomScene();
+                currentScene.init();
+                break;
+            default:
+                assert false : "Unknown scene '" + newScene + "'.";
+        }
     }
 
     public static Window getWindow() {
@@ -85,17 +107,31 @@ public class Window {
         * bindings available for use.
         */
         GL.createCapabilities();
+
+        Window.changeScene(0); // starting scene
     }
 
     public void loop() {
+        float beginTime = Time.getTimeSinceStart();
+        float endTime;
+        float dt = -1.0f;
+
         while (!glfwWindowShouldClose(glfwWindow)) {
-            // poll events (input)
+            // poll events (input events)
             glfwPollEvents();
 
-            glClearColor(1.0f, 0.75f, 0.8f, 1.0f);
+            glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT); // clears the color with the color that was made one line up
 
+            if(dt >= 0) {
+                currentScene.update(dt);
+            }
+
             glfwSwapBuffers(glfwWindow); // swaps the front and back buffer (frame update)
+
+            endTime = Time.getTimeSinceStart();
+            dt = endTime - beginTime;
+            beginTime = endTime;
         }
     }
 }

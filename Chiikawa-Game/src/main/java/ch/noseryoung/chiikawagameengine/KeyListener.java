@@ -1,4 +1,4 @@
-package ch.noseryoung.ChiikawaGameEngine;
+package ch.noseryoung.chiikawagameengine;
 
 import org.lwjgl.glfw.GLFW;
 

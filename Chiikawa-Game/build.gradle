@@ -5,9 +5,12 @@ plugins {
 group = 'ch.noseryoung'
 version = '1.0-SNAPSHOT'
 project.ext.lwjglVersion = "3.2.3"
-sourceCompatibility = 1.11 // todo: fix this
 project.ext.jomlVersion = "1.10.8"
 project.ext.lwjglNatives = "natives-windows"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
 
 test {
     useJUnitPlatform()

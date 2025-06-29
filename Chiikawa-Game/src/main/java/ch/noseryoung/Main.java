@@ -1,6 +1,6 @@
 package ch.noseryoung;
 
-import ch.noseryoung.ChiikawaGameEngine.Window;
+import ch.noseryoung.chiikawagameengine.Window;
 
 public class Main   {
     public static void main(String[] args) {

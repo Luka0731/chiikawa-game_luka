@@ -3,12 +3,54 @@
 |--- introduction ---|
 This txt-document has just some general theory and explanations to concepts that are important to this project
 
+|--- LWJGL Guide ---|
+https://www.lwjgl.org/guide
+
 |--- callback ---|
 A callback is a function that you register, and the system (or library) calls automatically when a specific event
 happens. This website shows GLFW Callbacks that can be used: https://www.glfw.org/docs/3.3/input_guide.html
 
 |--- lambda expression ---|
--
+Lambda expressions are a shorthand way to create anonymous functions (functions without a name) in Java.
+They are mainly used to pass behavior (like what should happen when a key is pressed) into methods or callbacks.
+Instead of creating a full class or method, you write the logic directly as a parameter — clean and compact.
+There is more to lambda expression, but it's a too big of a concept to explain in this text.
 
 |--- callback ---|
-mods in the listener classes are just additional key/buttons that are pressed
+mods in the listener classes are just additional key/buttons that are pressed with other buttons.
+
+|--- Java Assertions ---|
+Used for debugging logic short and quickly. It isn't used for user input
+Syntax: assert x > 0 : "Error message";
+It's default disabled, so to enable wright: java -ea YourProgram
+
+|--- graphics programming ---|
+Huge thema that is explained in a quick overview in these videos:
+* Video 1: https://youtu.be/TAXEND6xSYU?si=rkY3fTCWmBewXpcA
+* Video 2: https://youtu.be/WMiggUPst-Q?si=KilWM0hl_Ka1goLg
+* Book of Shaders: https://thebookofshaders.com/
+* Hello Triangle OpenGL: https://learnopengl.com/Getting-started/Hello-Triangle
+
+Some important technical terms to graphics programming:
+* Raster Graphics
+* Blit
+* Graphics Pipeline
+* Back then: you send pixels to the gpu | Nowadays: you send shapes (vertex/vertices)
+* Vertex Data[] -> Vertex Shader -> Shape Assembly -> Geometry Shader -> Rasterization ->
+  Fragment Shader -> Test & Blending
+* GL_POINT, GL_STRIP, GL_TRI
+* Clipping right bevor the Rasterization
+* VBO (Vortex Buffer Object)
+* VAO (Vortex Array Object)
+* EBO (Element Buffer Object)
+* Offset
+* Stride
+* Patching
+* Fragments
+* Radiant
+* Compilation/Linking and interpreting
+* #type vertex and #type fragment
+
+|--- init methods ---|
+This is more of a naming convention. It's a method you create to set up something before it starts running like
+preparing a window, loading assets, or setting variables. The use of it is, to keep the constructor clean and other
