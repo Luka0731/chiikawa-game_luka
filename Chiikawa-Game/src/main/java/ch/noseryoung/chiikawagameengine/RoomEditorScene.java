@@ -1,6 +1,8 @@
 package ch.noseryoung.chiikawagameengine;
 
 import java.awt.event.KeyEvent;
+
+import ch.noseryoung.renderer.Shader;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 
@@ -60,54 +62,12 @@ public class RoomEditorScene extends Scene {
 
     private int vaoID, vboID, eboID;
 
+    private Shader defaultShader;
+
     @Override
     public void init() {
-        // compile and linking the shaders
-
-        // load and compile the vertex shader
-        vertexID = glCreateShader(GL_VERTEX_SHADER);
-        // pass the shader source code to the gpu
-        glShaderSource(vertexID, vertexShaderSrc);
-        glCompileShader(vertexID);
-
-
-        int success = glGetShaderi(vertexID, GL_COMPILE_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetShaderi(vertexID, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tVertex shader compilation failed.");
-            System.out.println(glGetShaderInfoLog(vertexID, len));
-            assert false : "";
-        }
-
-        // First load and compile the vertex shaderAdd commentMore actions
-        fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
-        // Pass the shader source to the GPU
-        glShaderSource(fragmentID, fragmentShaderSrc);
-        glCompileShader(fragmentID);
-
-        // Check for errors in compilation
-        success = glGetShaderi(fragmentID, GL_COMPILE_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tFragment shader compilation failed.");
-            System.out.println(glGetShaderInfoLog(fragmentID, len));
-            assert false : "";
-        }
-
-        // Link shaders and check for errorsAdd commentMore actions
-        shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexID);
-        glAttachShader(shaderProgram, fragmentID);
-        glLinkProgram(shaderProgram);
-
-        // Check for linking errors
-        success = glGetProgrami(shaderProgram, GL_LINK_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetProgrami(shaderProgram, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tLinking of shaders failed.");
-            System.out.println(glGetProgramInfoLog(shaderProgram, len));
-            assert false : "";
-        }
+        defaultShader = new Shader("assets/shaders/default.glsl");
+        defaultShader.compileAndLinkShader();
 
         // |--- generating VAO, VBO and EBO and sending it to the GPU ---|
         vaoID = glGenVertexArrays(); // OpenGL its way to make a VAO and giving it an id
@@ -146,7 +106,9 @@ public class RoomEditorScene extends Scene {
 
     @Override
     public void update(float dt) {
-        glUseProgram(shaderProgram); // bind shader program
+
+        defaultShader.useShader();
+
         glBindVertexArray(vaoID); // bind the VAO
 
         // enable vertex attribute pointers
@@ -161,6 +123,6 @@ public class RoomEditorScene extends Scene {
 
         glBindVertexArray(0); // binde nothing
 
-        glUseProgram(0); // don't use a program
+        defaultShader.detachShader();
     }
 }

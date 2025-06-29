@@ -54,3 +54,5 @@ Some important technical terms to graphics programming:
 |--- init methods ---|
 This is more of a naming convention. It's a method you create to set up something before it starts running like
 preparing a window, loading assets, or setting variables. The use of it is, to keep the constructor clean and other
+
+|--- regex ---|
