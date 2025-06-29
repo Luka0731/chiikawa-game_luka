@@ -1,6 +1,7 @@
 package ch.noseryoung.chiikawagameengine;
 
 import ch.noseryoung.renderer.Shader;
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -13,11 +14,11 @@ public class RoomEditorScene extends Scene {
     public RoomEditorScene() {}
 
     private float[] vertexArray = {
-            // 1: position,       2: color
-            0.5f,  -0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f, // bottom right
-            -0.5f, 0.5f,  0.0f,   0.0f, 1.0f, 0.0f, 1.0f, // top left
-            0.5f,  0.5f,  0.0f,   0.0f, 0.0f, 1.0f, 1.0f, // top right
-            -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f, 1.0f  // bottom left
+            // 1: position,           2: color
+            100.5f,  0.5f,  0.0f,   1.0f, 0.0f, 0.0f, 1.0f, // bottom right
+            0.5f,  100.5f,  0.0f,   0.0f, 1.0f, 0.0f, 1.0f, // top left
+            100.5f,   100.5f,  0.0f,   0.0f, 0.0f, 1.0f, 1.0f, // top right
+            0.5f, 0.5f,  0.0f,   1.0f, 0.0f, 1.0f, 1.0f  // bottom left
     };
 
     // important: must be counter-clockwise order
@@ -37,6 +38,7 @@ public class RoomEditorScene extends Scene {
 
     @Override
     public void init() {
+        this.camera = new Camera(new Vector2f());
         defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.compileAndLinkShader();
 
@@ -77,8 +79,10 @@ public class RoomEditorScene extends Scene {
 
     @Override
     public void update(float dt) {
-
+        camera.position.x -= dt * 50.0f;
         defaultShader.useShader();
+        defaultShader.uploadMat4f("uProjectionMatrix", camera.getProjectionMatrix());
+        defaultShader.uploadMat4f("uViewMatrix", camera.getViewMatrix());
 
         glBindVertexArray(vaoID); // bind the VAO
 
