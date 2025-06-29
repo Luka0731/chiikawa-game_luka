@@ -25,5 +25,6 @@ out vec4 color;
 
 void main()
 {
-    color = fColor;
+    float avg = (fColor.r + fColor.g + fColor.b) / 3;
+    color = vec4(avg, avg, avg, 1);
 }

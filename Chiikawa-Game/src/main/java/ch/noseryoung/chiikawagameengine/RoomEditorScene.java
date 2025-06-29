@@ -1,6 +1,7 @@
 package ch.noseryoung.chiikawagameengine;
 
 import ch.noseryoung.renderer.Shader;
+import ch.noseryoung.util.Time;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import java.nio.FloatBuffer;
@@ -83,6 +84,7 @@ public class RoomEditorScene extends Scene {
         defaultShader.useShader();
         defaultShader.uploadMat4f("uProjectionMatrix", camera.getProjectionMatrix());
         defaultShader.uploadMat4f("uViewMatrix", camera.getViewMatrix());
+        defaultShader.uploadFloat("uTime", Time.getTimeSinceStart());
 
         glBindVertexArray(vaoID); // bind the VAO
 
