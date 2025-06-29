@@ -1,6 +1,7 @@
 package ch.noseryoung.chiikawagameengine;
 
 import ch.noseryoung.renderer.Shader;
+import ch.noseryoung.renderer.Texture;
 import ch.noseryoung.util.Time;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
@@ -15,11 +16,11 @@ public class RoomEditorScene extends Scene {
     public RoomEditorScene() {}
 
     private float[] vertexArray = {
-            // 1: position,           2: color
-            100.5f,  0.5f,  0.0f,   1.0f, 0.0f, 0.0f, 1.0f, // bottom right
-            0.5f,  100.5f,  0.0f,   0.0f, 1.0f, 0.0f, 1.0f, // top left
-            100.5f,   100.5f,  0.0f,   0.0f, 0.0f, 1.0f, 1.0f, // top right
-            0.5f, 0.5f,  0.0f,   1.0f, 0.0f, 1.0f, 1.0f  // bottom left
+            // 1: position,         2: color                  3: UV Coordinates
+            100.5f,   0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   1, 1, // bottom right
+              0.5f, 100.5f, 0.0f,   0.0f, 1.0f, 0.0f, 1.0f,   0, 0, // top left
+            100.5f, 100.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,   1, 0, // top right
+              0.5f,   0.5f, 0.0f,   1.0f, 0.0f, 1.0f, 1.0f,   0, 1  // bottom left
     };
 
     // important: must be counter-clockwise order
@@ -36,12 +37,14 @@ public class RoomEditorScene extends Scene {
     private int vaoID, vboID, eboID;
 
     private Shader defaultShader;
+    private Texture testTexture;
 
     @Override
     public void init() {
         this.camera = new Camera(new Vector2f());
         defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.compileAndLinkShader();
+        this.testTexture = new Texture("assets/images/BlowMeChiikawa.png");
 
         // |--- generating VAO, VBO and EBO and sending it to the GPU ---|
         vaoID = glGenVertexArrays(); // OpenGL its way to make a VAO and giving it an id
@@ -69,19 +72,29 @@ public class RoomEditorScene extends Scene {
         // add the vertex attribute pointers (making so the gpu read the vertexArray)
         int positionSize = 3;
         int colorSize = 4;
-        int floatSizeBytes = 4;
-        int vertexSizeBytes = (positionSize + colorSize) * floatSizeBytes;
+        int uvSize = 2;
+        int vertexSizeBytes = (positionSize + colorSize + uvSize) * Float.BYTES;
         glVertexAttribPointer(0, positionSize, GL_FLOAT, false, vertexSizeBytes, 0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionSize * floatSizeBytes);
+        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionSize * Float.BYTES);
         glEnableVertexAttribArray(1);
+
+        glVertexAttribPointer(2, uvSize, GL_FLOAT, false, vertexSizeBytes, (positionSize + colorSize) * Float.BYTES);
+        glEnableVertexAttribArray(2);
     }
 
     @Override
     public void update(float dt) {
         camera.position.x -= dt * 50.0f;
+        camera.position.y -= dt * 20.0f;
         defaultShader.useShader();
+
+        // upload texture to shader
+        defaultShader.uploadTexture("TEX_SAMPLER", 0);
+        glActiveTexture(GL_TEXTURE0);
+        testTexture.bindTexture();
+
         defaultShader.uploadMat4f("uProjectionMatrix", camera.getProjectionMatrix());
         defaultShader.uploadMat4f("uViewMatrix", camera.getViewMatrix());
         defaultShader.uploadFloat("uTime", Time.getTimeSinceStart());
@@ -99,6 +112,8 @@ public class RoomEditorScene extends Scene {
         glDisableVertexAttribArray(1);
 
         glBindVertexArray(0); // binde nothing
+
+        testTexture.unbindTexture();
 
         defaultShader.detachShader();
     }

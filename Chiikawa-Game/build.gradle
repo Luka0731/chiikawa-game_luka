@@ -56,6 +56,6 @@ dependencies {
 * Native File Dialog  ->  a C-library to open file dialogs for any System
 * OpenAL              ->  audio library
 * OpenGL              ->  grafik library
-* stb                 ->  for loading images, fonts, soundfiles, everything
+* stb / stbi          ->  for loading images, fonts, soundfiles, everything
 * Gradle              ->  build-tool for java. Makes it easy to import libraries
 */

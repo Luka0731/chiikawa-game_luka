@@ -140,4 +140,10 @@ public class Shader {
         glUniform1i(varLocation, value);
     }
     // todo: make more upload methods (vec3f, vec2f, mat3f, mat2f)
+
+    public void uploadTexture(String varName, int slot) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+        useShader();
+        glUniform1i(varLocation, slot);
+    }
 }
