@@ -1,5 +1,7 @@
 package ch.noseryoung.chiikawagameengine;
 
+import ch.noseryoung.components.FontRenderer;
+import ch.noseryoung.components.SpriteRenderer;
 import ch.noseryoung.renderer.Shader;
 import ch.noseryoung.renderer.Texture;
 import ch.noseryoung.util.Time;
@@ -39,8 +41,17 @@ public class RoomEditorScene extends Scene {
     private Shader defaultShader;
     private Texture testTexture;
 
+    GameObject testObject;
+    private boolean firstTime = true;
+
     @Override
     public void init() {
+        System.out.println("Creating 'test object'");
+        this.testObject = new GameObject("Test Object");
+        this.testObject.addComponent(new SpriteRenderer());
+        this.testObject.addComponent(new FontRenderer());
+        this.addGameObjectToScene(this.testObject);
+
         this.camera = new Camera(new Vector2f());
         defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.compileAndLinkShader();
@@ -116,5 +127,17 @@ public class RoomEditorScene extends Scene {
         testTexture.unbindTexture();
 
         defaultShader.detachShader();
+
+        if (firstTime) {
+            System.out.println("Creating 'test object'");
+            GameObject gameObject = new GameObject("Game Test 2");
+            gameObject.addComponent(new SpriteRenderer());
+            this.addGameObjectToScene(gameObject);
+            firstTime = false;
+        }
+
+        for (GameObject gameObject: this.gameObjects) {
+            gameObject.update(dt);
+        }
     }
 }

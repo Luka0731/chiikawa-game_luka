@@ -36,10 +36,12 @@ public class Window {
             case 0:
                 currentScene = new RoomEditorScene();
                 currentScene.init();
+                currentScene.start();
                 break;
             case 1:
                 currentScene = new RoomScene();
                 currentScene.init();
+                currentScene.start();
                 break;
             default:
                 assert false : "Unknown scene '" + newScene + "'.";

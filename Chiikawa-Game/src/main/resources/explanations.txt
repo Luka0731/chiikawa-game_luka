@@ -74,3 +74,11 @@ Defines near and far limits of camera view; anything outside gets clipped (not r
 * WC and NDC
 * aPos from the Shader
 
+|--- object oriented programming, component pattern, data oriented design, entity component system ---|
+Explanation link: https://youtu.be/HkG8ZdhoXhs?si=fnx1pB3C0TICoXnb
+
+|--- generics ---|
+Explanation link: https://youtu.be/K1iu1kXkVoA?si=3c6VNVa50SgiIXHN
+
+|--- casting ---|
+
