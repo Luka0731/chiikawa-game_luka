@@ -30,4 +30,8 @@ public abstract class Scene {
             gameObject.start();
         }
     }
+
+    public Camera getCamera() {
+        return camera;
+    }
 }
