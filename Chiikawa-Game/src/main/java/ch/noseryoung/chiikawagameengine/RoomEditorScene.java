@@ -1,6 +1,7 @@
 package ch.noseryoung.chiikawagameengine;
 
 import ch.noseryoung.components.SpriteRenderer;
+import ch.noseryoung.util.AssetPool;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -32,6 +33,11 @@ public class RoomEditorScene extends Scene {
                 this.addGameObjectToScene(go);
             }
         }
+        loadResources();
+    }
+
+    private void loadResources() {
+        AssetPool.getShader("assets/shaders/default.glsl");
     }
 
     @Override
