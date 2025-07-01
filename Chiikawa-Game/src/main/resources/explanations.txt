@@ -82,3 +82,6 @@ Explanation link: https://youtu.be/K1iu1kXkVoA?si=3c6VNVa50SgiIXHN
 
 |--- casting ---|
 -
+
+|--- batch rendering ---|
+-

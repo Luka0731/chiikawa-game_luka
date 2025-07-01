@@ -1,143 +1,47 @@
 package ch.noseryoung.chiikawagameengine;
 
-import ch.noseryoung.components.FontRenderer;
 import ch.noseryoung.components.SpriteRenderer;
-import ch.noseryoung.renderer.Shader;
-import ch.noseryoung.renderer.Texture;
-import ch.noseryoung.util.Time;
 import org.joml.Vector2f;
-import org.lwjgl.BufferUtils;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
+import org.joml.Vector4f;
 
 public class RoomEditorScene extends Scene {
 
     public RoomEditorScene() {}
 
-    private float[] vertexArray = {
-            // 1: position,         2: color                  3: UV Coordinates
-            100.5f,   0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   1, 1, // bottom right
-              0.5f, 100.5f, 0.0f,   0.0f, 1.0f, 0.0f, 1.0f,   0, 0, // top left
-            100.5f, 100.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,   1, 0, // top right
-              0.5f,   0.5f, 0.0f,   1.0f, 0.0f, 1.0f, 1.0f,   0, 1  // bottom left
-    };
-
-    // important: must be counter-clockwise order
-    private int[] elementArray = {
-            /*
-               x     x
-
-               x     x
-            */
-            2, 1, 0, // top right triangle
-            0, 1, 3  // bottom left triangle
-    };
-
-    private int vaoID, vboID, eboID;
-
-    private Shader defaultShader;
-    private Texture testTexture;
-
-    GameObject testObject;
-    private boolean firstTime = true;
-
     @Override
     public void init() {
-        System.out.println("Creating 'test object'");
-        this.testObject = new GameObject("Test Object");
-        this.testObject.addComponent(new SpriteRenderer());
-        this.testObject.addComponent(new FontRenderer());
-        this.addGameObjectToScene(this.testObject);
+        // testing
+        this.camera = new Camera(new Vector2f(-250, 0));
 
-        this.camera = new Camera(new Vector2f());
-        defaultShader = new Shader("assets/shaders/default.glsl");
-        defaultShader.compileAndLinkShader();
-        this.testTexture = new Texture("assets/images/BlowMeChiikawa.png");
+        int xOffset = 10;
+        int yOffset = 10;
 
-        // |--- generating VAO, VBO and EBO and sending it to the GPU ---|
-        vaoID = glGenVertexArrays(); // OpenGL its way to make a VAO and giving it an id
-        glBindVertexArray(vaoID); // everything that happens after this line, will be happening to the vertex array
+        float totalWidth = (float)(600 - xOffset * 2);
+        float totalHeight = (float)(300 - yOffset * 2);
+        float sizeX = totalWidth / 100.0f;
+        float sizeY = totalHeight / 100.0f;
+        float padding = 1.0f;
 
-        // create a float buffer of vertices for OpenGL
-        FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertexArray.length);
-        vertexBuffer.put(vertexArray).flip(); // now putting the float buffer in and sorts it right with the flip method
+        for (int x=0; x < 100; x++) {
+            for (int y=0; y < 100; y++) {
+                float xPos = xOffset + (x * sizeX) + (padding * x);
+                float yPos = yOffset + (y * sizeY) + (padding * y);
 
-        // create the vbo and upload vertex buffer
-        vboID = glGenBuffers(); // making a new buffer
-        glBindBuffer(GL_ARRAY_BUFFER, vboID); // sais now everything that were doing is for the buffer a line above
-        // now were saying with the parameters:
-        // 1: were working with an array buffer, 2: the buffer to send, 3: it won't change
-        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
-
-        // create the indices and upload
-        IntBuffer elementBuffer = BufferUtils.createIntBuffer(elementArray.length);
-        elementBuffer.put(elementArray).flip();
-
-        eboID = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW);
-
-        // add the vertex attribute pointers (making so the gpu read the vertexArray)
-        int positionSize = 3;
-        int colorSize = 4;
-        int uvSize = 2;
-        int vertexSizeBytes = (positionSize + colorSize + uvSize) * Float.BYTES;
-        glVertexAttribPointer(0, positionSize, GL_FLOAT, false, vertexSizeBytes, 0);
-        glEnableVertexAttribArray(0);
-
-        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionSize * Float.BYTES);
-        glEnableVertexAttribArray(1);
-
-        glVertexAttribPointer(2, uvSize, GL_FLOAT, false, vertexSizeBytes, (positionSize + colorSize) * Float.BYTES);
-        glEnableVertexAttribArray(2);
+                GameObject go = new GameObject("Obj" + x + "" + y, new Transform(new Vector2f(xPos, yPos), new Vector2f(sizeX, sizeY)));
+                go.addComponent(new SpriteRenderer(new Vector4f(xPos / totalWidth, yPos / totalHeight, 1, 1)));
+                this.addGameObjectToScene(go);
+            }
+        }
     }
 
     @Override
     public void update(float dt) {
-        camera.position.x -= dt * 50.0f;
-        camera.position.y -= dt * 20.0f;
-        defaultShader.useShader();
-
-        // upload texture to shader
-        defaultShader.uploadTexture("TEX_SAMPLER", 0);
-        glActiveTexture(GL_TEXTURE0);
-        testTexture.bindTexture();
-
-        defaultShader.uploadMat4f("uProjectionMatrix", camera.getProjectionMatrix());
-        defaultShader.uploadMat4f("uViewMatrix", camera.getViewMatrix());
-        defaultShader.uploadFloat("uTime", Time.getTimeSinceStart());
-
-        glBindVertexArray(vaoID); // bind the VAO
-
-        // enable vertex attribute pointers
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-
-        glDrawElements(GL_TRIANGLES, elementArray.length, GL_UNSIGNED_INT, 0);
-
-        // unbind everything
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        glBindVertexArray(0); // binde nothing
-
-        testTexture.unbindTexture();
-
-        defaultShader.detachShader();
-
-        if (firstTime) {
-            System.out.println("Creating 'test object'");
-            GameObject gameObject = new GameObject("Game Test 2");
-            gameObject.addComponent(new SpriteRenderer());
-            this.addGameObjectToScene(gameObject);
-            firstTime = false;
-        }
+        System.out.println("FPS: " + (1.0f / dt));
 
         for (GameObject gameObject: this.gameObjects) {
             gameObject.update(dt);
         }
+
+        this.renderer.render();
     }
 }
