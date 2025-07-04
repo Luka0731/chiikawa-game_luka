@@ -14,25 +14,21 @@ public class RoomEditorScene extends Scene {
         // testing
         this.camera = new Camera(new Vector2f(-250, 0));
 
-        int xOffset = 10;
-        int yOffset = 10;
+        GameObject obj1 = new GameObject("Object 1, Blow Me Twin",
+                new Transform(new Vector2f(100, 100), new Vector2f(220, 231)));
+        obj1.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/BlowMeChiikawa.png")));
+        this.addGameObjectToScene(obj1);
 
-        float totalWidth = (float)(600 - xOffset * 2);
-        float totalHeight = (float)(300 - yOffset * 2);
-        float sizeX = totalWidth / 100.0f;
-        float sizeY = totalHeight / 100.0f;
-        float padding = 1.0f;
+        GameObject obj2 = new GameObject("Object 2, Chiikawa Gang",
+                new Transform(new Vector2f(400, 100), new Vector2f(600, 315)));
+        obj2.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/ChiikawaGang.png")));
+        this.addGameObjectToScene(obj2);
 
-        for (int x=0; x < 100; x++) {
-            for (int y=0; y < 100; y++) {
-                float xPos = xOffset + (x * sizeX) + (padding * x);
-                float yPos = yOffset + (y * sizeY) + (padding * y);
+        GameObject obj3 = new GameObject("Object 3, Blow Me Twin",
+                new Transform(new Vector2f(100, 400), new Vector2f(220, 231)));
+        obj3.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/BlowMeChiikawa.png")));
+        this.addGameObjectToScene(obj3);
 
-                GameObject go = new GameObject("Obj" + x + "" + y, new Transform(new Vector2f(xPos, yPos), new Vector2f(sizeX, sizeY)));
-                go.addComponent(new SpriteRenderer(new Vector4f(xPos / totalWidth, yPos / totalHeight, 1, 1)));
-                this.addGameObjectToScene(go);
-            }
-        }
         loadResources();
     }
 
