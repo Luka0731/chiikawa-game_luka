@@ -26,7 +26,7 @@ public class Renderer {
     private void add(SpriteRenderer sprite) {
         boolean added = false;
         for (RenderBatch batch : batches) {
-            if (batch.hasRoom() && batch.getZIndex() == sprite.gameObject.getZIndex()) {
+            if (batch.hasRoom() && batch.getZIndex() == sprite.gameObject.getZIndex()) { // todo: make so batch renderer is not restrictet to one zIndex
                 Texture texture = sprite.getTexture();
                 if (batch.hasTexture(texture) || batch.hasTextureRoom() || texture == null) {
                     batch.addSprite(sprite);
