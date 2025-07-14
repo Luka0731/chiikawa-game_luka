@@ -3,6 +3,7 @@ package ch.noseryoung.renderer;
 import ch.noseryoung.chiikawagameengine.Window;
 import ch.noseryoung.components.SpriteRenderer;
 import ch.noseryoung.util.AssetPool;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -16,7 +17,7 @@ import static org.lwjgl.opengl.GL20C.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-public class RenderBatch {
+public class RenderBatch implements Comparable<RenderBatch>{
     // Vertex
     // ======
     // Pos               Color                          tex coords      tex id
@@ -44,11 +45,14 @@ public class RenderBatch {
     private int maxBatchSize;
     private Shader shader;
 
-    public RenderBatch(int maxBatchSize) {
+    private int zIndex;
+
+    public RenderBatch(int maxBatchSize, int zIndex) {
         shader = AssetPool.getShader("assets/shaders/default.glsl");
         shader.compileAndLinkShader();
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
+        this.zIndex = zIndex;
 
         // 4 vertices quads
         vertices = new float[maxBatchSize * 4 * VERTEX_SIZE];
@@ -240,5 +244,14 @@ public class RenderBatch {
 
     public boolean hasTexture(Texture texture) {
         return this.textures.contains(texture);
+    }
+
+    public int getZIndex() {
+        return zIndex;
+    }
+
+    @Override
+    public int compareTo(RenderBatch o) {
+        return Integer.compare(zIndex, o.zIndex);
     }
 }
