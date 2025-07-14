@@ -7,13 +7,13 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
-import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load;
+import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
 
     private String textureFilePath;
     private int textID;
+    private int width, height;
 
     public Texture(String textureFilePath) {
         this.textureFilePath = textureFilePath;
@@ -34,9 +34,13 @@ public class Texture {
         IntBuffer width = BufferUtils.createIntBuffer(1);
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
+        stbi_set_flip_vertically_on_load(true);
         ByteBuffer image = stbi_load(textureFilePath, width, height, channels, channels.get(0));
 
         if (image != null) {
+            this.width = width.get(0);
+            this.height = height.get(0);
+
             if (channels.get(0) == 3) {
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0),
                         0, GL_RGB, GL_UNSIGNED_BYTE, image);
@@ -59,5 +63,13 @@ public class Texture {
 
     public void unbindTexture() {
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

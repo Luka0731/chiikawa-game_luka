@@ -82,3 +82,19 @@ Explanation link: https://youtu.be/K1iu1kXkVoA?si=3c6VNVa50SgiIXHN
 
 |--- casting ---|
 -
+
+|--- batch rendering ---|
+-
+
+|--- asset pool ---|
+-
+
+|--- differences between sprite, spritesheet, texture, SpriteRenderer and other similar classes ---|
+-
+
+|---  difference flag and boolean ---|
+Flag variable is used as a signal in programming to let the program know that a certain condition has met. It usually
+acts as a boolean variable indicating a condition to be either true or false
+
+|--- the graphical updating system ---|
+-

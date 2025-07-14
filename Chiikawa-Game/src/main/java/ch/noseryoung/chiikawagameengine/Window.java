@@ -1,14 +1,12 @@
 package ch.noseryoung.chiikawagameengine;
 
-import ch.noseryoung.util.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11C.glClear;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -114,11 +112,14 @@ public class Window {
         */
         GL.createCapabilities();
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
         Window.changeScene(0); // starting scene
     }
 
     public void loop() {
-        float beginTime = Time.getTimeSinceStart();
+        float beginTime = (float)glfwGetTime();
         float endTime;
         float dt = -1.0f;
 
@@ -135,7 +136,7 @@ public class Window {
 
             glfwSwapBuffers(glfwWindow); // swaps the front and back buffer (frame update)
 
-            endTime = Time.getTimeSinceStart();
+            endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
         }
