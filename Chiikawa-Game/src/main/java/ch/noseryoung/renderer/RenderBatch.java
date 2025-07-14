@@ -147,7 +147,7 @@ public class RenderBatch {
         int offset = index * 4 * VERTEX_SIZE;
 
         Vector4f color = sprite.getColor();
-        Vector2f[] texCoords = sprite.getTexCoords();
+        Vector2f[] texCoords = sprite.getTextureCoords();
 
         int texId = 0;
         // lops through textures, until it finds the right one
