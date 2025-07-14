@@ -23,7 +23,7 @@ public class GameObject {
         this.transform = transform;
     }
 
-    public <T extends Component> T getComponents(Class<T> componentClass) {
+    public <T extends Component> T getComponent(Class<T> componentClass) {
         for (Component component : components) {
             if (componentClass.isAssignableFrom(component.getClass())) {
                 try {

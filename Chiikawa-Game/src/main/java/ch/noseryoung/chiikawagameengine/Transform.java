@@ -24,4 +24,20 @@ public class Transform {
         this.scale = scale;
     }
 
+    public Transform copy() {
+        return new Transform(new Vector2f(position), new Vector2f(scale));
+    }
+
+    public void copy(Transform to) {
+        to.position.set(this.position);
+        to.scale.set(this.scale);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transform)) return false;
+        Transform that = (Transform) o;
+        return that.position.equals(this.position) && that.scale.equals(this.scale);
+    }
 }

@@ -15,7 +15,7 @@ public class Renderer {
     }
 
     public void add(GameObject go) {
-        SpriteRenderer spr = go.getComponents(SpriteRenderer.class);
+        SpriteRenderer spr = go.getComponent(SpriteRenderer.class);
         if (spr != null) {
             add(spr);
         }

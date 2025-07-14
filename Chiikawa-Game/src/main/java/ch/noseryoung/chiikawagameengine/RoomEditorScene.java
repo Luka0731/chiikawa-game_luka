@@ -5,9 +5,12 @@ import ch.noseryoung.components.SpriteRenderer;
 import ch.noseryoung.components.Spritesheet;
 import ch.noseryoung.util.AssetPool;
 import org.joml.Vector2f;
-import org.joml.Vector4f;
 
 public class RoomEditorScene extends Scene {
+
+    // testing
+    private GameObject obj1;
+    private Spritesheet sprites;
 
     public RoomEditorScene() {}
 
@@ -18,9 +21,9 @@ public class RoomEditorScene extends Scene {
         // testing
         this.camera = new Camera(new Vector2f(-250, 0));
 
-        Spritesheet sprites = AssetPool.getSpritesheet("assets/images/spritesheet.png");
+         sprites = AssetPool.getSpritesheet("assets/images/spritesheet.png");
 
-        GameObject obj1 = new GameObject("Object 1, Mario from a Spritesheet",
+        obj1 = new GameObject("Object 1, Mario from a Spritesheet",
                 new Transform(new Vector2f(-240, 10), new Vector2f(256, 256)));
         obj1.addComponent(new SpriteRenderer(sprites.getSprite(17)));
         this.addGameObjectToScene(obj1);
@@ -41,8 +44,24 @@ public class RoomEditorScene extends Scene {
 
     }
 
+    // testing
+    private int spriteIndex = 0;
+    private float spriteFlipTime = 0.2f;
+    private float spriteFlipTimeLeft = 0.0f;
     @Override
     public void update(float dt) {
+
+        // testing
+        spriteFlipTimeLeft -= dt;
+        if (spriteFlipTimeLeft <= 0) {
+             spriteFlipTimeLeft = spriteFlipTime;
+             spriteIndex++;
+             if (spriteIndex > 8) {
+                 spriteIndex = 0;
+             }
+             obj1.getComponent(SpriteRenderer.class).setSprite(sprites.getSprite(spriteIndex));
+        }
+
         System.out.println("FPS: " + (1.0f / dt));
 
         for (GameObject gameObject: this.gameObjects) {
