@@ -1,6 +1,7 @@
 package ch.noseryoung.chiikawagameengine;
 
 import ch.noseryoung.renderer.Renderer;
+import imgui.ImGui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public abstract class Scene {
     protected Camera camera;
     private boolean isRunning = false;
     protected List<GameObject> gameObjects = new ArrayList<GameObject>();
+    protected GameObject activeGameObject = null;
 
     public Scene() {}
 
@@ -39,4 +41,15 @@ public abstract class Scene {
     public Camera getCamera() {
         return camera;
     }
+
+    public void sceneImGui() {
+        if (activeGameObject != null) {
+            ImGui.begin("Inspector");
+            activeGameObject.imGui();
+            ImGui.end();
+        }
+        imGui();
+    }
+
+    public void imGui() {}
 }

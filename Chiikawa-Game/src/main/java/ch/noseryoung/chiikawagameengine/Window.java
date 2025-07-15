@@ -142,7 +142,7 @@ public class Window {
                 currentScene.update(dt);
             }
 
-            this.imGuiLayer.update(dt);
+            this.imGuiLayer.update(dt, currentScene);
             glfwSwapBuffers(glfwWindow); // swaps the front and back buffer (frame update)
 
             endTime = (float)glfwGetTime();

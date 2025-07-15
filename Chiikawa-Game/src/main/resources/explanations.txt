@@ -98,3 +98,6 @@ acts as a boolean variable indicating a condition to be either true or false
 
 |--- the graphical updating system ---|
 -
+
+|--- traditional serialization and serialization with reflection ---|
+-

@@ -61,4 +61,5 @@ dependencies {
 * OpenGL              ->  grafik library
 * stb / stbi          ->  for loading images, fonts, soundfiles, everything
 * Gradle              ->  build-tool for java. Makes it easy to import libraries
+* ImGui               ->  immediate mode GUI library used to create real-time user interfaces (e.g., debug tools, editors, overlays)
 */

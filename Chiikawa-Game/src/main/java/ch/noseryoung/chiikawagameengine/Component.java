@@ -4,9 +4,11 @@ import java.awt.*;
 
 public abstract class Component {
 
-    public GameObject gameObject;
-
-    public abstract void update(float dt);
+    public GameObject gameObject = null;
 
     public void start() {}
+
+    public void update(float dt) {};
+
+    public void imGui() {}
 }
