@@ -2,8 +2,6 @@ package ch.noseryoung.chiikawagameengine;
 
 import ch.noseryoung.components.Sprite;
 import ch.noseryoung.components.SpriteRenderer;
-import ch.noseryoung.components.Spritesheet;
-import ch.noseryoung.renderer.Texture;
 import ch.noseryoung.util.AssetPool;
 import org.joml.Vector2f;
 
