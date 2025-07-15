@@ -7,6 +7,7 @@ version = '1.0-SNAPSHOT'
 project.ext.lwjglVersion = "3.2.3"
 project.ext.jomlVersion = "1.10.8"
 project.ext.lwjglNatives = "natives-windows"
+project.ext.imguiVersion = '1.76-0.9'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -25,11 +26,13 @@ repositories {
 }
 
 dependencies {
+    // ImGui
+    implementation fileTree('libs') { include '*.jar'}
+
+    // LWJGL
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
-
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-assimp"
     implementation "org.lwjgl:lwjgl-glfw"
@@ -50,7 +53,7 @@ dependencies {
 /*
 * |--- Explanations of the used dependencies ---|
 *
-* LWJGL               ->  low-level framework build for games and multi media programms.
+* LWJGL               ->  low-level framework build for games and multi media programms
 * Assimp              ->  for loading 3d-models
 * GLFW                ->  window handler. Also responsible for input
 * Native File Dialog  ->  a C-library to open file dialogs for any System

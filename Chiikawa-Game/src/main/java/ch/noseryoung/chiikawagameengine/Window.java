@@ -16,6 +16,7 @@ public class Window {
     String title;
     private static Window window = null; // singleton
     private long glfwWindow; // the memory space location of the window (pointer)
+    private ImGuiLayer imGuiLayer;
     private static Scene currentScene = null;
     public float r, g, b, a;
 
@@ -95,6 +96,10 @@ public class Window {
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, MouseListener::scrollCallback);
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
+        glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) ->  {
+            Window.setWidth(newWidth);
+            Window.setHeight(newHeight);
+        });
 
         // make OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
@@ -115,6 +120,9 @@ public class Window {
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
+        this.imGuiLayer = new ImGuiLayer(glfwWindow);
+        this.imGuiLayer.initImGui();
+
         Window.changeScene(0); // starting scene
     }
 
@@ -134,11 +142,28 @@ public class Window {
                 currentScene.update(dt);
             }
 
+            this.imGuiLayer.update(dt);
             glfwSwapBuffers(glfwWindow); // swaps the front and back buffer (frame update)
 
             endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
         }
+    }
+
+    public static int getWidth() {
+        return getWindow().width;
+    }
+
+    public static int getHeight() {
+        return getWindow().height;
+    }
+
+    public static void setWidth(int newWidth) {
+        getWindow().width = newWidth;
+    }
+
+    public static void setHeight(int newHeight) {
+        getWindow().height = newHeight;
     }
 }

@@ -19,7 +19,7 @@ public class RoomEditorScene extends Scene {
         this.camera = new Camera(new Vector2f(-250, 0));
 
         GameObject obj2 = new GameObject("Object 2, green qube",
-                new Transform(new Vector2f(100, 100), new Vector2f(100, 100)), 0);
+                new Transform(new Vector2f(100, 100), new Vector2f(100, 200)), 2);
         obj2.addComponent(new SpriteRenderer(new Sprite(
                 AssetPool.getTexture("assets/images/blendImage2.png")
         )));
