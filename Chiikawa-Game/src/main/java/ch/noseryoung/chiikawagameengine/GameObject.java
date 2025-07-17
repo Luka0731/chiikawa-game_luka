@@ -1,5 +1,8 @@
 package ch.noseryoung.chiikawagameengine;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,14 @@ public class GameObject {
         component.gameObject = this;
     }
 
+    public JsonElement serializeComponents(JsonSerializationContext context) {
+        JsonArray array = new JsonArray();
+        for (Component c : components) {
+            array.add(context.serialize(c, Component.class)); // wichtig!
+        }
+        return array;
+    }
+
     public void update(float dt) {
         for (int i = 0; i < components.size(); i++) {
             components.get(i).update(dt);
@@ -76,5 +87,9 @@ public class GameObject {
 
     public int getZIndex() {
         return zIndex;
+    }
+
+    public List<Component> getComponents() {
+        return components;
     }
 }

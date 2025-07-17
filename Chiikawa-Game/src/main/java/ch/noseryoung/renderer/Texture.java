@@ -15,7 +15,7 @@ public class Texture {
     private int textID;
     private int width, height;
 
-    public Texture(String textureFilePath) {
+    public void init(String textureFilePath) {
         this.textureFilePath = textureFilePath;
 
         // generate texture on GPU
