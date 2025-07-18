@@ -11,16 +11,9 @@ This file contains all the things that still have to be improved or done for thi
 * Go through the whole code and improve naming, keeping it consistent
 * More organisation, like sometimes a class has a init, some don't. Often the code is very inconsistent.
 * Add more comments and sort the code, so it is more clearly arranged and i also know what new and complex code does.
+* incript save file
 
 |--- problems to fix ---|
 
 
 |--- potential problems to fix ---|
-* Comment says: "I know the series already has like 40 episodes ahead, but i feel like i should say that, the objects
-  are getting duplicated in the files because we are initializing them every time we open the game, so with each save
-  and reload we add new objects to the scene. that's why the object is not getting applied by the color picker".
-* Comment says: "ey found this annotation while following along with the series. I registers the json type adapter for
-  you at the class level, so you can serialize/deserialize like any other object.
-                @JsonAdapter(Utility.GsonGameObjectTypeAdapter.class)
-                 public class GameObject {
-  I have put my json adapters into the utility package but I tried it out and it works perfectly.".

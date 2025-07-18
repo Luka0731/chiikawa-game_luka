@@ -1,12 +1,15 @@
 package ch.noseryoung.chiikawagameengine;
 
+import ch.noseryoung.util.GameObjectTypeAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
+import com.google.gson.annotations.JsonAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonAdapter(GameObjectTypeAdapter.class)
 public class GameObject {
 
     private String name;

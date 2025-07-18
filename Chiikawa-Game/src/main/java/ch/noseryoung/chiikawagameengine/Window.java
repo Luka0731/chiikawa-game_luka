@@ -24,27 +24,23 @@ public class Window {
         this.width = 1920;
         this.height = 1080;
         this.title = "Chiikawa Game!";
-        this.r = 1;
-        this.g = 1;
-        this.b = 1;
-        this.a = 1;
     }
 
+    // todo: not making this with int, but passing trought the actual scene
     public static void changeScene(int newScene) {
         switch (newScene) {
             case 0:
                 currentScene = new RoomEditorScene();
-                currentScene.init();
-                currentScene.start();
                 break;
             case 1:
                 currentScene = new RoomScene();
-                currentScene.init();
-                currentScene.start();
                 break;
             default:
                 assert false : "Unknown scene '" + newScene + "'.";
         }
+        currentScene.load();
+        currentScene.init();
+        currentScene.start();
     }
 
     public static Window getWindow() {
@@ -131,12 +127,11 @@ public class Window {
         float endTime;
         float dt = -1.0f;
 
-        currentScene.load();
         while (!glfwWindowShouldClose(glfwWindow)) {
             // poll events (input events)
             glfwPollEvents();
 
-            glClearColor(r, g, b, a);
+            glClearColor(1, 1, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT); // clears the color with the color that was made one line up
 
             if(dt >= 0) {

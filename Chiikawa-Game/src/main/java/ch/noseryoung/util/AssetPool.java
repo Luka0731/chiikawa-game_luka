@@ -10,6 +10,7 @@ import java.util.Map;
 
 // todo: improve paths
 // todo: also can make it so it throws error if not exists
+// todo: small rework needed, cause there is a bug with the ids (episode 22)
 public class AssetPool {
     private static Map<String, Shader> shaders = new HashMap<>();
     private static Map<String, Texture> textures = new HashMap<>();

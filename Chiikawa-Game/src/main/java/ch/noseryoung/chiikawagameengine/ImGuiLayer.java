@@ -153,9 +153,6 @@ public class ImGuiLayer {
         // Glyphs could be added per-font as well as per config used globally like here
         fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesDefault());
 
-        File f = new File("assets/fonts/ubuntu/Ubuntu-Light.ttf");
-        System.out.println("Font exists: " + f.exists());
-
         // Fonts merge example
         fontConfig.setPixelSnapH(true);
         fontAtlas.addFontFromFileTTF("assets/fonts/ubuntu/Ubuntu-Light.ttf", 24, fontConfig);

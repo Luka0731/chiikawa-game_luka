@@ -1,12 +1,12 @@
 package ch.noseryoung.chiikawagameengine;
 
 import ch.noseryoung.renderer.Renderer;
+import ch.noseryoung.util.ComponentTypeAdapter;
+import ch.noseryoung.util.GameObjectTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,10 +47,6 @@ public abstract class Scene {
         }
     }
 
-    public Camera getCamera() {
-        return camera;
-    }
-
     public void sceneImGui() {
         if (activeGameObject != null) {
             ImGui.begin("Inspector");
@@ -64,29 +60,20 @@ public abstract class Scene {
 
     // todo: make whole system better
     public void saveExit() {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Component.class, new ComponentTypeAdapter())
-                .registerTypeAdapter(GameObject.class, new GameObjectTypeAdapter())
-                .create();
-
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter fw = new FileWriter("level.txt");
             fw.write(gson.toJson(gameObjects));
             fw.close();
-            System.out.println(gson.toJson(gameObjects));
         } catch (IOException e) {
             e.printStackTrace(); // todo: make this better
         }
     }
 
     // todo: make whole system better
+    // todo: fix multiple loading
     public void load() {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Component.class, new ComponentTypeAdapter())
-                .registerTypeAdapter(GameObject.class, new GameObjectTypeAdapter())
-                .create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String inFile = "";
         try {
             inFile = new String(Files.readAllBytes(Paths.get("level.txt")));
@@ -102,4 +89,9 @@ public abstract class Scene {
             this.isLevelLoaded = true;
         }
     }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
 }
