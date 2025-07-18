@@ -12,15 +12,15 @@ import static org.lwjgl.stb.STBImage.*;
 public class Texture {
 
     private String textureFilePath;
-    private int textID;
+    private int id;
     private int width, height;
 
     public void init(String textureFilePath) {
         this.textureFilePath = textureFilePath;
 
         // generate texture on GPU
-        textID = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, textID);
+        id = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, id);
 
         // set texture parameters
         // repeat image in both directions
@@ -58,7 +58,7 @@ public class Texture {
     }
 
     public void bindTexture() {
-        glBindTexture(GL_TEXTURE_2D, textID);
+        glBindTexture(GL_TEXTURE_2D, id);
     }
 
     public void unbindTexture() {
@@ -71,5 +71,9 @@ public class Texture {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getId() {
+        return id;
     }
 }

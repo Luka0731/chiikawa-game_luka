@@ -12,9 +12,11 @@
             "w": 0.0
           },
           "sprite": {
+            "width": 0.0,
+            "height": 0.0,
             "texture": {
               "textureFilePath": "assets/images/BlowMeChiikawa.png",
-              "textID": 2,
+              "id": 0,
               "width": 220,
               "height": 231
             },
@@ -77,6 +79,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 0.0,
+            "height": 0.0,
             "textureCoords": [
               {
                 "x": 1.0,

@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
 
+// todo: make it more flexible of reading in spritesheets (as example spritsheet with inconsistent spacings between the sprites)
 public class Spritesheet {
 
     private Texture texture;
@@ -33,6 +34,8 @@ public class Spritesheet {
             Sprite sprite = new Sprite();
             sprite.setTexture(this.texture);
             sprite.setTextureCoords(textureCoords);
+            sprite.setWidth(spriteWidth);
+            sprite.setHeight(spriteHeight);
             this.sprites.add(sprite);
 
             currentX += spriteWidth;
@@ -45,5 +48,9 @@ public class Spritesheet {
 
     public Sprite getSprite(int spriteIndex) {
         return this.sprites.get(spriteIndex);
+    }
+
+    public int getSize() {
+        return sprites.size();
     }
 }

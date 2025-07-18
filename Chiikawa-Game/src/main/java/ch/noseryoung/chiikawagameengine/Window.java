@@ -18,7 +18,6 @@ public class Window {
     private long glfwWindow; // the memory space location of the window (pointer)
     private ImGuiLayer imGuiLayer;
     private static Scene currentScene = null;
-    public float r, g, b, a;
 
     private Window() {
         this.width = 1920;

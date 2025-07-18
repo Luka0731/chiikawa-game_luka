@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 
 public class Sprite {
 
+    float width, height;
     private Texture texture = null;
     private Vector2f[] textureCoords = {
             new Vector2f(1.0f, 1.0f),
@@ -12,22 +13,6 @@ public class Sprite {
             new Vector2f(0.0f, 0.0f),
             new Vector2f(0.0f, 1.0f),
     };
-
-//    public Sprite(Texture texture) {
-//        this.texture = texture;
-//        Vector2f[] textureCoords = {
-//                new Vector2f(1.0f, 1.0f), // todo: make more efficient
-//                new Vector2f(1.0f, 0.0f),
-//                new Vector2f(0.0f, 0.0f),
-//                new Vector2f(0.0f, 1.0f)
-//        };
-//        this.textureCoords = textureCoords;
-//    }
-//
-//    public Sprite(Texture texture, Vector2f[] textureCoords) {
-//        this.texture = texture;
-//        this.textureCoords = textureCoords;
-//    }
 
     public Texture getTexture() {
         return texture;
@@ -37,11 +22,31 @@ public class Sprite {
         return textureCoords;
     }
 
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public int getTextureId() {
+        return texture == null ? -1 : texture.getId();
+    }
+
     public void setTexture(Texture texture) {
         this.texture = texture;
     }
 
     public void setTextureCoords(Vector2f[] textureCoords) {
         this.textureCoords = textureCoords;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
     }
 }

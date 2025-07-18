@@ -3,22 +3,28 @@ package ch.noseryoung.chiikawagameengine;
 import ch.noseryoung.components.Rigidbody;
 import ch.noseryoung.components.Sprite;
 import ch.noseryoung.components.SpriteRenderer;
+import ch.noseryoung.components.Spritesheet;
 import ch.noseryoung.util.AssetPool;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
+import imgui.ImVec2;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import java.util.Vector;
+
 public class RoomEditorScene extends Scene {
+
+    private Spritesheet sprites;
 
     @Override
     public void init() {
         loadResources();
 
         // testing
-        this.camera = new Camera(new Vector2f(-250, 0));
-
+        this.camera = new Camera(new Vector2f(-250, -50));
+        sprites = AssetPool.getSpritesheet("assets/images/decorationsAndBlocks.png");
         if (isLevelLoaded) {
             this.activeGameObject = gameObjects.get(0);
             return;
@@ -46,12 +52,17 @@ public class RoomEditorScene extends Scene {
 
     private void loadResources() {
         AssetPool.getShader("assets/shaders/default.glsl");
+        AssetPool.addSpritesheet("assets/images/decorationsAndBlocks.png",
+                new Spritesheet(AssetPool.getTexture("assets/images/decorationsAndBlocks.png"),
+                        16, 16, 81, 0));
         AssetPool.getTexture("assets/images/BlowMeChiikawa.png");
     }
 
     @Override
     public void update(float dt) {
         // System.out.println("FPS: " + (1.0f / dt)); // testing
+
+        MouseListener.getOrthoY();
 
         for (GameObject gameObject: this.gameObjects) {
             gameObject.update(dt);
@@ -64,7 +75,37 @@ public class RoomEditorScene extends Scene {
     public void imGui() {
         // testing
         ImGui.begin("Test window");
-        ImGui.text("Oi oi Baka sus");
+
+        ImVec2 windowPos = new ImVec2();
+        ImGui.getWindowPos(windowPos);
+        ImVec2 windowSize = new ImVec2();
+        ImGui.getWindowSize(windowSize);
+        ImVec2 itemSpacing = new ImVec2();
+        ImGui.getStyle().getItemSpacing(itemSpacing);
+
+        float windowsX2 = windowPos.x + windowSize.x;
+        for (int i = 0; i < sprites.getSize(); i++) {
+            Sprite sprite = sprites.getSprite(i);
+            float spriteWidth = sprite.getWidth() * 4;
+            float spriteHeight = sprite.getHeight() * 4;
+            int id = sprite.getTextureId();
+            Vector2f[] textureCoords = sprite.getTextureCoords();
+
+            ImGui.pushID(i);
+            if(ImGui.imageButton(id, spriteWidth, spriteHeight, textureCoords[2].x, textureCoords[0].y, textureCoords[0].x, textureCoords[2].y)) {
+                System.out.println("Button " + i + " is clicked");
+            }
+            ImGui.popID();
+
+            ImVec2 lastButtonPosition = new ImVec2();
+            ImGui.getItemRectMax(lastButtonPosition);
+            float lastButtonX2 = lastButtonPosition.x;
+            float nextButtonX2 = lastButtonX2 + itemSpacing.x + spriteWidth;
+            if (i + 1 < sprites.getSize() && nextButtonX2 < windowsX2) {
+                ImGui.sameLine();
+            }
+        }
+
         ImGui.end();
     }
 }
