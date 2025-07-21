@@ -1,5 +1,6 @@
 package ch.noseryoung.chiikawagameengine;
 
+import ch.noseryoung.renderer.DebugDraw;
 import ch.noseryoung.scenes.RoomEditorScene;
 import ch.noseryoung.scenes.RoomScene;
 import ch.noseryoung.scenes.Scene;
@@ -133,10 +134,13 @@ public class Window {
             // poll events (input events)
             glfwPollEvents();
 
+            DebugDraw.beginFrame();
+
             glClearColor(1, 1, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT); // clears the color with the color that was made one line up
 
             if(dt >= 0) {
+                DebugDraw.draw();
                 currentScene.update(dt);
             }
 
