@@ -17,10 +17,13 @@ public class RoomEditorScene extends Scene {
 
     private Spritesheet sprites;
 
-    MouseControls mouseControls = new MouseControls();
+    GameObject levelEditorStuff = new GameObject("LevelEditorStuff", new Transform(new Vector2f()), 0);
 
     @Override
     public void init() {
+        levelEditorStuff.addComponent(new MouseControls());
+        levelEditorStuff.addComponent(new GridLines());
+
         loadResources();
 
         // testing
@@ -28,28 +31,27 @@ public class RoomEditorScene extends Scene {
         sprites = AssetPool.getSpritesheet("assets/images/decorationsAndBlocks.png");
         if (isLevelLoaded) {
             this.activeGameObject = gameObjects.get(0);
-            DebugDraw.addLine2D(new Vector2f(-130, 0), new Vector2f(-100, 600), new Vector3f(1, 0, 0), 800);
             return;
         }
 
-        GameObject obj1 = new GameObject("Object 1, object with image",
-                new Transform(new Vector2f(20, 100), new Vector2f(300, 157)), 0);
-        SpriteRenderer obj1SpriteRenderer = new SpriteRenderer();
-        Sprite obj1Sprite = new Sprite();
-        obj1Sprite.setTexture(AssetPool.getTexture("assets/images/ChiikawaGang.png"));
-        obj1SpriteRenderer.setSprite(obj1Sprite);
-        obj1.addComponent(obj1SpriteRenderer);
-        obj1.addComponent(new Rigidbody());
-        this.addGameObjectToScene(obj1);
-
-        GameObject obj2 = new GameObject("Object 2, cube",
-                new Transform(new Vector2f(300, 100), new Vector2f(100, 200)), 1);
-        SpriteRenderer obj2Sprite = new SpriteRenderer();
-        obj2.addComponent(obj2Sprite);
-        obj2Sprite.setColor(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
-        this.addGameObjectToScene(obj2);
-
-        this.activeGameObject = obj1;
+//        GameObject obj1 = new GameObject("Object 1, object with image",
+//                new Transform(new Vector2f(20, 100), new Vector2f(300, 157)), 0);
+//        SpriteRenderer obj1SpriteRenderer = new SpriteRenderer();
+//        Sprite obj1Sprite = new Sprite();
+//        obj1Sprite.setTexture(AssetPool.getTexture("assets/images/ChiikawaGang.png"));
+//        obj1SpriteRenderer.setSprite(obj1Sprite);
+//        obj1.addComponent(obj1SpriteRenderer);
+//        obj1.addComponent(new Rigidbody());
+//        this.addGameObjectToScene(obj1);
+//
+//        GameObject obj2 = new GameObject("Object 2, cube",
+//                new Transform(new Vector2f(300, 100), new Vector2f(100, 200)), 1);
+//        SpriteRenderer obj2Sprite = new SpriteRenderer();
+//        obj2.addComponent(obj2Sprite);
+//        obj2Sprite.setColor(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+//        this.addGameObjectToScene(obj2);
+//
+//        this.activeGameObject = obj1;
     }
 
     private void loadResources() {
@@ -57,12 +59,12 @@ public class RoomEditorScene extends Scene {
         AssetPool.addSpritesheet("assets/images/decorationsAndBlocks.png",
                 new Spritesheet(AssetPool.getTexture("assets/images/decorationsAndBlocks.png"),
                         16, 16, 81, 0));
-        AssetPool.getTexture("assets/images/ChiikawaGang.png");
+//        AssetPool.getTexture("assets/images/ChiikawaGang.png");
     }
 
     @Override
     public void update(float dt) {
-        mouseControls.update(dt);
+        levelEditorStuff.update(dt);
 
         for (GameObject gameObject: this.gameObjects) {
             gameObject.update(dt);
@@ -94,7 +96,7 @@ public class RoomEditorScene extends Scene {
             ImGui.pushID(i);
             if(ImGui.imageButton(id, spriteWidth, spriteHeight, textureCoords[2].x, textureCoords[0].y, textureCoords[0].x, textureCoords[2].y)) {
                 GameObject gameObject = Prefabs.generateSpriteObject(sprite, spriteWidth, spriteHeight);
-                mouseControls.pickupObject(gameObject);
+                levelEditorStuff.getComponent(MouseControls.class).pickupObject(gameObject);
             }
             ImGui.popID();
 
@@ -106,7 +108,6 @@ public class RoomEditorScene extends Scene {
                 ImGui.sameLine();
             }
         }
-
         ImGui.end();
     }
 }
