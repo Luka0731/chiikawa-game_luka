@@ -1,8 +1,9 @@
-package ch.noseryoung.chiikawagameengine;
+package ch.noseryoung.scenes;
 
+import ch.noseryoung.chiikawagameengine.Camera;
+import ch.noseryoung.chiikawagameengine.Component;
+import ch.noseryoung.chiikawagameengine.GameObject;
 import ch.noseryoung.renderer.Renderer;
-import ch.noseryoung.util.ComponentTypeAdapter;
-import ch.noseryoung.util.GameObjectTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
@@ -82,10 +83,26 @@ public abstract class Scene {
         }
 
         if (!inFile.isEmpty()) {
+            int maxGameObjectId = -1;
+            int maxComponentId = -1;
             GameObject[] gameObjects = gson.fromJson(inFile, GameObject[].class);
             for (int i = 0; i < gameObjects.length; i++) {
                 addGameObjectToScene(gameObjects[i]);
+
+                for (Component component : gameObjects[i].getComponents()) {
+                    if(component.getUid() > maxComponentId) {
+                        maxComponentId = component.getUid();
+                    }
+                }
+                if(gameObjects[i].getUid() > maxGameObjectId) {
+                    maxGameObjectId =  gameObjects[i].getUid();
+                }
             }
+
+            maxGameObjectId++;
+            maxComponentId++;
+            GameObject.init(maxGameObjectId);
+            Component.init(maxComponentId);
             this.isLevelLoaded = true;
         }
     }
@@ -93,5 +110,4 @@ public abstract class Scene {
     public Camera getCamera() {
         return camera;
     }
-
 }

@@ -1,5 +1,8 @@
 package ch.noseryoung.chiikawagameengine;
 
+import ch.noseryoung.scenes.RoomEditorScene;
+import ch.noseryoung.scenes.RoomScene;
+import ch.noseryoung.scenes.Scene;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;

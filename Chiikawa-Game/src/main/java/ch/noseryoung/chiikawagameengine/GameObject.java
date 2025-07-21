@@ -11,6 +11,8 @@ import java.util.List;
 
 @JsonAdapter(GameObjectTypeAdapter.class)
 public class GameObject {
+    private static int ID_COUNTER = 0;
+    private int uid = -1;
 
     private String name;
     private List<Component> components;
@@ -18,18 +20,12 @@ public class GameObject {
     private int zIndex;
 
     // todo: make init methods
-    public GameObject(String name) {
-        this.name = name;
-        this.components = new ArrayList<>();
-        this.transform = new Transform();
-        this.zIndex = 0;
-    }
-
     public GameObject(String name, Transform transform, int zIndex) {
         this.name = name;
         this.components = new ArrayList<>();
         this.transform = transform;
         this.zIndex = zIndex;
+        this.uid = ID_COUNTER++; // todo: may cause problems in the future
     }
 
     public <T extends Component> T getComponent(Class<T> componentClass) {
@@ -58,6 +54,7 @@ public class GameObject {
     }
 
     public void addComponent(Component component) {
+        component.generateId();
         components.add(component);
         component.gameObject = this;
     }
@@ -94,5 +91,17 @@ public class GameObject {
 
     public List<Component> getComponents() {
         return components;
+    }
+
+    public static void init(int maxId) {
+        ID_COUNTER = maxId;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public String getName() {
+        return name;
     }
 }

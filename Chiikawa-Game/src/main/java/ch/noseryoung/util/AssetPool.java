@@ -53,4 +53,3 @@ public class AssetPool {
         return spritesheets.getOrDefault(file.getAbsolutePath(), null);
     }
 }
-

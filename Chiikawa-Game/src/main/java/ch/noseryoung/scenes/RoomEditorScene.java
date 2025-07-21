@@ -1,22 +1,21 @@
-package ch.noseryoung.chiikawagameengine;
+package ch.noseryoung.scenes;
 
-import ch.noseryoung.components.Rigidbody;
-import ch.noseryoung.components.Sprite;
-import ch.noseryoung.components.SpriteRenderer;
-import ch.noseryoung.components.Spritesheet;
+import ch.noseryoung.chiikawagameengine.Camera;
+import ch.noseryoung.chiikawagameengine.GameObject;
+import ch.noseryoung.chiikawagameengine.Transform;
+import ch.noseryoung.components.*;
 import ch.noseryoung.util.AssetPool;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import ch.noseryoung.util.Prefabs;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-import java.util.Vector;
-
 public class RoomEditorScene extends Scene {
 
     private Spritesheet sprites;
+
+    MouseControls mouseControls = new MouseControls();
 
     @Override
     public void init() {
@@ -62,7 +61,7 @@ public class RoomEditorScene extends Scene {
     public void update(float dt) {
         // System.out.println("FPS: " + (1.0f / dt)); // testing
 
-        MouseListener.getOrthoY();
+        mouseControls.update(dt);
 
         for (GameObject gameObject: this.gameObjects) {
             gameObject.update(dt);
@@ -93,7 +92,8 @@ public class RoomEditorScene extends Scene {
 
             ImGui.pushID(i);
             if(ImGui.imageButton(id, spriteWidth, spriteHeight, textureCoords[2].x, textureCoords[0].y, textureCoords[0].x, textureCoords[2].y)) {
-                System.out.println("Button " + i + " is clicked");
+                GameObject gameObject = Prefabs.generateSpriteObject(sprite, spriteWidth, spriteHeight);
+                mouseControls.pickupObject(gameObject);
             }
             ImGui.popID();
 

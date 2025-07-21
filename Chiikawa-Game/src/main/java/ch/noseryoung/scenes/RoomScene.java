@@ -1,4 +1,4 @@
-package ch.noseryoung.chiikawagameengine;
+package ch.noseryoung.scenes;
 
 public class RoomScene extends Scene {
 

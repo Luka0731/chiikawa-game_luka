@@ -10,7 +10,7 @@ public class MouseListener {
     private static MouseListener mouseListener;
     private double scrollX, scrollY;
     private double xPos, yPos, lastY, lastX;
-    private boolean mouseButtonPressed[] = new boolean[3]; // list for all mouse buttons
+    private boolean mouseButtonPressed[] = new boolean[9]; // list for all mouse buttons
     private boolean isDragging;
 
     public MouseListener() {
@@ -95,16 +95,12 @@ public class MouseListener {
     }
 
     public static float getOrthoY() {
-        float currentY = getY();
-        currentY = ((currentY / (float)Window.getHeight()) * 2.0f - 1.0f) * -1.0f; // todo: make the calculation better
+        float currentY = Window.getHeight() - getY();
+        currentY = (currentY / (float)Window.getHeight()) * 2.0f - 1.0f; // todo: make the calculation better
         Vector4f tmp = new Vector4f(0, currentY, 0, 1);
         tmp.mul(Window.getCurrentScene().getCamera().getInverseProjectionMatrix()).mul(Window.getCurrentScene().getCamera().getInverseViewMatrix()) ;
         currentY = tmp.y;
-
-        System.out.println(currentY);
-
         return currentY;
-
     }
 
     public static float getDX() {

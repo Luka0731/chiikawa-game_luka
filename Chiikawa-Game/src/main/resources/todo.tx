@@ -6,7 +6,6 @@ This file contains all the things that still have to be improved or done for thi
 * (maybe) implement lombok, link: https://github.com/projectlombok/lombok
 * make a performance test
 
-
 |--- improvements ---|
 * Go through the whole code and improve naming, keeping it consistent
 * More organisation, like sometimes a class has a init, some don't. Often the code is very inconsistent.
@@ -14,6 +13,7 @@ This file contains all the things that still have to be improved or done for thi
 * incript save file
 
 |--- problems to fix ---|
-
+* if saving, the sprite doesn't work
+* if saving, some objects just get deleted (Like not the object, but components and especially the sprites)
 
 |--- potential problems to fix ---|

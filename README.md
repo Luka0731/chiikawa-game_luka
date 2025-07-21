@@ -1,1 +1,1 @@
-# chiikawa-game_nori_luka
+# Chiikawa Game
