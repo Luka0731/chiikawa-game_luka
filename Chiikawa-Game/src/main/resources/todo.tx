@@ -19,3 +19,7 @@ This file contains all the things that still have to be improved or done for thi
 * sometimes if draging in stuff, it just dosent show up until later
 
 |--- potential problems to fix ---|
+* Comment says:
+    Setting the amount of points in the points array to anything above 18 will start drawing random blue lines at random places. At higher values the random lines cover most of the window. Got any ideas about this?
+    edit: figured this out, the MAX_LINES value was too low, but now the problem is that the additional line drawn after the loop is too long and the circle looks dented.
+    Awnser: Hey pajicadvance, this might be because I use the incorrect value in the glDraw call. I ended up fixing this at the second to last episode, but you can see the fixed code here:
