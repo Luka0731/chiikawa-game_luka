@@ -30,7 +30,7 @@ public class KeyListener {
     }
 
 
-    // |--- getters ---|
+    // |--- getters & setters ---|
 
     public static boolean isKeyPressed (int button) {
         if (button < getKeyListener().KeyPressed.length) {
@@ -39,5 +39,4 @@ public class KeyListener {
         System.err.println("KeyListener ERROR: Button index " + button + " is out of bounds!");
         return false;
     }
-
 }

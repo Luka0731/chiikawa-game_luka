@@ -8,20 +8,33 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+
+/**
+ * DebugDraw is responsible for rendering temporary 2D lines for development and debugging purposes.
+ * It uses a simple batching system to draw lines efficiently using OpenGL. It is separated to the
+ * whole render system built in other classes.
+ */
 public class DebugDraw {
-
     private static final int MAX_LINES = 500;
-    private static List<Line2D> lines = new ArrayList<>(); // todo: coulde be an array
+    private static final int POSITION_SIZE = 3;
+    private static final int COLOR_SIZE = 3;
+    private static final int POSITION_OFFSET = 0;
+    private static final int COLOR_OFFSET = POSITION_SIZE * Float.BYTES;
+    private static final int VERTEX_SIZE = POSITION_SIZE + COLOR_SIZE;
+    private static final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
+    private static final int VERTEX_AMOUNT_PER_LINE = 2;
+    private static final int LINE_SIZE = VERTEX_AMOUNT_PER_LINE * VERTEX_SIZE;
 
-    private static float[] vertexArray = new float[MAX_LINES * 6 * 2];
-    private static Shader shader = AssetPool.getShader("assets/shaders/debugLine2D.glsl");
+    private static final List<Line2D> lines = new ArrayList<>();
+
+    private static final float[] vertexArray = new float[MAX_LINES * LINE_SIZE];
+    private static final Shader shader = AssetPool.addOrGetShader("assets/shaders/debugLine2D.glsl");
 
     private static int vaoID;
     private static int vboID;
@@ -39,9 +52,9 @@ public class DebugDraw {
         glBufferData(GL_ARRAY_BUFFER, (long)vertexArray.length * Float.BYTES, GL_DYNAMIC_DRAW);
 
         // enable the vertex array attributes
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * Float.BYTES, 0);
+        glVertexAttribPointer(0, POSITION_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, POSITION_OFFSET);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * Float.BYTES, 3 * Float.BYTES);
+        glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, COLOR_OFFSET);
         glEnableVertexAttribArray(1);
 
         glLineWidth(4.0f);
@@ -53,7 +66,7 @@ public class DebugDraw {
             wasStarted = true;
         }
 
-        // remove dead lines
+        // remove deadlines
         for (int i = 0; i < lines.size(); i++) {
             if (lines.get(i).beginFrame() < 0) {
                 lines.remove(i);
@@ -68,7 +81,7 @@ public class DebugDraw {
         int index = 0;
         for (Line2D line : lines) {
             for (int i=0; i < 2; i++) {
-                Vector2f position = i == 0 ? line.getFrom() : line.getTo();
+                Vector2f position = i == 0 ? line.getFromPosition() : line.getToPosition();
                 Vector3f color = line.getColor();
 
                 // load position
@@ -85,7 +98,7 @@ public class DebugDraw {
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, Arrays.copyOfRange(vertexArray, 0, lines.size() * 6 * 2));
+        glBufferSubData(GL_ARRAY_BUFFER, 0, Arrays.copyOfRange(vertexArray, 0, lines.size() * LINE_SIZE));
 
         // use our shader
         shader.useShader();
@@ -98,7 +111,7 @@ public class DebugDraw {
         glEnableVertexAttribArray(1);
 
         // draw the batch
-        glDrawArrays(GL_LINES, 0, lines.size() * 6 * 2); // bresenham's line algorithm to draw this stuff
+        glDrawArrays(GL_LINES, 0, lines.size() * LINE_SIZE); // bresenham's line algorithm to draw this stuff
 
         // disable location
         glDisableVertexAttribArray(0);

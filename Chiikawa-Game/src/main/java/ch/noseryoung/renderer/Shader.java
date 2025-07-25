@@ -16,11 +16,10 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
-
     private int shaderProgramID;
     private String vertexShaderSource;
     private String fragmentShaderSource;
-    private String shaderFilePath;
+    private final String shaderFilePath;
     private boolean beingUsed = false;
 
     public Shader (String shaderFilePath) {
@@ -47,8 +46,7 @@ public class Shader {
                 throw new IOException("Error: Both vertex and fragment shader must be defined.");
             }
         } catch(IOException e) {
-            e.printStackTrace();
-            assert false : "Error: Could not open shader file '" + shaderFilePath + "'.";
+            assert false : "Error: Could not open shader file '" + shaderFilePath + "'.\t" + e.getMessage();
         }
     }
 
@@ -114,6 +112,9 @@ public class Shader {
         beingUsed = false;
     }
 
+
+    // |--- uploads ---|
+
     public void uploadMat4f(String varName, Matrix4f mat4) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         useShader();
@@ -139,7 +140,6 @@ public class Shader {
         useShader();
         glUniform1i(varLocation, value);
     }
-    // todo: make more upload methods (vec3f, vec2f, mat3f, mat2f)
 
     public void uploadTexture(String varName, int slot) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);

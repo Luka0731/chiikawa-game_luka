@@ -1,5 +1,5 @@
 |---------  to do list ---------|
-This file contains all the things that still have to be improved or done for this project
+This file contains all the things that still have toPosition be improved or done for this project
 
 |--- to do ---|
 * learn Lambda expression
@@ -10,16 +10,16 @@ This file contains all the things that still have to be improved or done for thi
 * Go through the whole code and improve naming, keeping it consistent
 * More organisation, like sometimes a class has a init, some don't. Often the code is very inconsistent.
 * Add more comments and sort the code, so it is more clearly arranged and i also know what new and complex code does.
-* incript save file
+* Incript save file
+* The program should read spritesheets better
 
 |--- problems to fix ---|
-* if saving, the sprite doesn't work
-* if saving, some objects just get deleted (Like not the object, but components and especially the sprites)
+* if saving, some objects just get deleted (Like not the object, but components and especially the sprites, not dirty flag problem)
 * program can only load pngs and nothing else
-* sometimes if draging in stuff, it just dosent show up until later
+* sometimes if dragging in stuff, it just dosen't show up until later
 
 |--- potential problems to fix ---|
 * Comment says:
-    Setting the amount of points in the points array to anything above 18 will start drawing random blue lines at random places. At higher values the random lines cover most of the window. Got any ideas about this?
+    Setting the amount of points in the points array toPosition anything above 18 will start drawing random blue lines at random places. At higher values the random lines cover most of the window. Got any ideas about this?
     edit: figured this out, the MAX_LINES value was too low, but now the problem is that the additional line drawn after the loop is too long and the circle looks dented.
-    Awnser: Hey pajicadvance, this might be because I use the incorrect value in the glDraw call. I ended up fixing this at the second to last episode, but you can see the fixed code here:
+    Answer: Hey pajicadvance, this might be because I use the incorrect value in the glDraw call. I ended up fixing this at the second toPosition last episode, but you can see the fixed code here:

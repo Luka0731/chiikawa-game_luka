@@ -6,7 +6,6 @@ import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 public class MouseListener {
-
     private static MouseListener mouseListener;
     private double scrollX, scrollY;
     private double xPos, yPos, lastY, lastX;
@@ -75,7 +74,7 @@ public class MouseListener {
     }
 
 
-    // |--- getters ---|
+    // |--- getters & setters ---|
 
     public static float getX() {
         return (float)getMouseListener().xPos;
@@ -96,7 +95,7 @@ public class MouseListener {
 
     public static float getOrthoY() {
         float currentY = Window.getHeight() - getY();
-        currentY = (currentY / (float)Window.getHeight()) * 2.0f - 1.0f; // todo: make the calculation better
+        currentY = (currentY / (float)Window.getHeight()) * 2.0f - 1.0f;
         Vector4f tmp = new Vector4f(0, currentY, 0, 1);
         tmp.mul(Window.getCurrentScene().getCamera().getInverseProjectionMatrix()).mul(Window.getCurrentScene().getCamera().getInverseViewMatrix()) ;
         currentY = tmp.y;

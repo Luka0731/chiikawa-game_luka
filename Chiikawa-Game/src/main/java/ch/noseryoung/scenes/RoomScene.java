@@ -9,5 +9,4 @@ public class RoomScene extends Scene {
 
     @Override
     public void update(float dt) {}
-
 }

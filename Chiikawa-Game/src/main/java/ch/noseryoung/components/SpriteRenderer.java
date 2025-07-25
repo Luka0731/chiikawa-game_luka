@@ -1,6 +1,5 @@
 package ch.noseryoung.components;
 
-import ch.noseryoung.chiikawagameengine.Component;
 import ch.noseryoung.chiikawagameengine.Transform;
 import ch.noseryoung.renderer.Texture;
 import imgui.ImGui;
@@ -8,24 +7,11 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class SpriteRenderer extends Component {
-
     private Vector4f color = new Vector4f(1, 1, 1, 1);
     private Sprite sprite = new Sprite();
 
     private transient Transform lastTransform ;
     private transient boolean isDirty = true;
-
-/*    public SpriteRenderer(Vector4f color) {
-        this.color = color;
-        this.sprite = new Sprite(null);
-        isDirty = true;
-    }
-
-    public SpriteRenderer(Sprite sprite) {
-        this.sprite = sprite;
-        this.color = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-        isDirty = true;
-    }*/
 
     @Override
     public void start() {
@@ -48,6 +34,9 @@ public class SpriteRenderer extends Component {
             this.isDirty = true;
         }
     }
+
+
+    // |--- getters & setters ---|
 
     public Vector4f getColor() {
         return color;
@@ -80,5 +69,9 @@ public class SpriteRenderer extends Component {
 
     public void setClean() {
         isDirty = false;
+    }
+
+    public void setDirty() {
+        isDirty = true;
     }
 }

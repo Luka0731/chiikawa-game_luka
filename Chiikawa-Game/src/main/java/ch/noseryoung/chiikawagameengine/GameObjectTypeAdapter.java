@@ -1,13 +1,12 @@
-package ch.noseryoung.util;
+package ch.noseryoung.chiikawagameengine;
 
-import ch.noseryoung.chiikawagameengine.Component;
-import ch.noseryoung.chiikawagameengine.GameObject;
-import ch.noseryoung.chiikawagameengine.Transform;
+import ch.noseryoung.components.Component;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
 public class GameObjectTypeAdapter implements JsonDeserializer<GameObject> {
+
     @Override
     public GameObject deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();

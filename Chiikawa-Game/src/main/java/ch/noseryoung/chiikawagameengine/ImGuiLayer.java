@@ -12,8 +12,10 @@ import imgui.gl3.ImGuiImplGl3;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+/**
+ * The ImGuiLayer class handles the integration of Dear ImGui into the engine.
+ */
 public class ImGuiLayer {
-
     private long glfwWindow;
 
     // Mouse cursors provided by GLFW
@@ -184,7 +186,7 @@ public class ImGuiLayer {
 
         // Any Dear ImGui code SHOULD go between ImGui.newFrame()/ImGui.render() methods
         ImGui.newFrame();
-        currentScene.sceneImGui();
+        currentScene.updateImGuiInScene();
         ImGui.showDemoWindow();
         ImGui.render();
 

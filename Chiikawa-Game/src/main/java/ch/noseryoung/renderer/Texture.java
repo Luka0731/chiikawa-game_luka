@@ -10,7 +10,6 @@ import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
-
     private String textureFilePath;
     private int id;
     private int width, height;
@@ -56,6 +55,9 @@ public class Texture {
 
         stbi_image_free(image); // free the memory (or memory leak happens)
     }
+
+
+    // |--- getters & setters ---|
 
     public void bindTexture() {
         glBindTexture(GL_TEXTURE_2D, id);

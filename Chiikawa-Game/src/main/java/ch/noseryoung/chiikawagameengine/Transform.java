@@ -2,10 +2,14 @@ package ch.noseryoung.chiikawagameengine;
 
 import org.joml.Vector2f;
 
+/**
+ * Every game object contains an instance of this class.
+ * It is used to manage the position, rotation, and scale of the object.
+ */
 public class Transform {
-
     public Vector2f position;
     public Vector2f scale;
+    // todo: add rotation
 
     public Transform() {
         init(new Vector2f(), new Vector2f());

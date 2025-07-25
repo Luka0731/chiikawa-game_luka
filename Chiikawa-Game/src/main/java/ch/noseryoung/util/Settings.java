@@ -2,7 +2,12 @@ package ch.noseryoung.util;
 
 public class Settings {
 
-    public static int GRID_WIDTH = 64;
-    public static int GRID_HEIGHT = 64;
+    public static class Game {
+        public static final String TITLE = "Chiikawa Game!";
+    }
 
+    public static class Grid {
+        public static final int WIDTH = 64;
+        public static final int HEIGHT = 64;
+    }
 }

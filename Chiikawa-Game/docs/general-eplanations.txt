@@ -1,0 +1,24 @@
+|---------  General Explanations  ---------|
+
+|--- introduction ---|
+This txt-document has just some general theory and explanations to concepts that are important to this project.
+
+|--- lambda expression ---|
+Lambda expressions are a shorthand way to create anonymous functions (functions without a name) in Java.
+They are mainly used to pass behavior (like what should happen when a key is pressed) into methods or callbacks.
+Instead of creating a full class or method, you write the logic directly as a parameter — clean and compact.
+There is more to lambda expression, but it's a too big of a concept to explain in this text.
+
+|--- java assertions ---|
+Used for debugging logic short and quickly. It isn't used for user input
+Syntax: assert x > 0 : "Error message";
+It's default disabled, so to enable wright: java -ea YourProgram
+
+|--- regex ---|
+-
+
+|--- generics ---|
+Explanation link: https://youtu.be/K1iu1kXkVoA?si=3c6VNVa50SgiIXHN
+
+|--- casting ---|
+-

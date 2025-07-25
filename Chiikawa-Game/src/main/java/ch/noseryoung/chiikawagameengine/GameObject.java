@@ -1,6 +1,6 @@
 package ch.noseryoung.chiikawagameengine;
 
-import ch.noseryoung.util.GameObjectTypeAdapter;
+import ch.noseryoung.components.Component;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
@@ -13,7 +13,6 @@ import java.util.List;
 public class GameObject {
     private static int ID_COUNTER = 0;
     private int uid = -1;
-
     private String name;
     private List<Component> components;
     public Transform transform;
@@ -26,6 +25,44 @@ public class GameObject {
         this.transform = transform;
         this.zIndex = zIndex;
         this.uid = ID_COUNTER++; // todo: may cause problems in the future
+    }
+
+    public void start() {
+        for (int i = 0; i < components.size(); i++) {
+            components.get(i).start();
+        }
+    }
+
+    public void update(float dt) {
+        for (int i = 0; i < components.size(); i++) {
+            components.get(i).update(dt);
+        }
+    }
+
+    public void imGui () {
+        for (Component component : components) {
+            component.imGui();
+        }
+    }
+
+
+    // |--- component handling ---|
+
+    public void addComponent(Component component) {
+        component.generateId();
+        components.add(component);
+        component.gameObject = this;
+    }
+
+    public <T extends Component> void removeComponent(Class<T> componentClass) {
+        for (int i = 0; i < components.size(); i++) { // done like this, cause not to run into concurrent modification errors
+            Component component = components.get(i);
+            if (componentClass.isAssignableFrom(components.get(i).getClass())) {
+                components.remove(i);
+                return;
+                // todo maby: check if there is multiple same components
+            }
+        }
     }
 
     public <T extends Component> T getComponent(Class<T> componentClass) {
@@ -42,48 +79,8 @@ public class GameObject {
         return null;
     }
 
-    public <T extends Component> void removeComponent(Class<T> componentClass) {
-        for (int i = 0; i < components.size(); i++) { // done like this, cause not to run into concurrent modification errors
-            Component component = components.get(i);
-            if (componentClass.isAssignableFrom(components.get(i).getClass())) {
-                components.remove(i);
-                return;
-                // todo maby: check if there is multiple same components
-            }
-        }
-    }
 
-    public void addComponent(Component component) {
-        component.generateId();
-        components.add(component);
-        component.gameObject = this;
-    }
-
-    public JsonElement serializeComponents(JsonSerializationContext context) {
-        JsonArray array = new JsonArray();
-        for (Component c : components) {
-            array.add(context.serialize(c, Component.class)); // wichtig!
-        }
-        return array;
-    }
-
-    public void update(float dt) {
-        for (int i = 0; i < components.size(); i++) {
-            components.get(i).update(dt);
-        }
-    }
-
-    public void start() {
-        for (int i = 0; i < components.size(); i++) {
-            components.get(i).start();
-        }
-    }
-
-    public void imGui () {
-        for (Component component : components) {
-            component.imGui();
-        }
-    }
+    // |--- getters & setters ---|
 
     public int getZIndex() {
         return zIndex;

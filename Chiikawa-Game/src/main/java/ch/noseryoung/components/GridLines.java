@@ -1,12 +1,14 @@
 package ch.noseryoung.components;
 
-import ch.noseryoung.chiikawagameengine.Component;
 import ch.noseryoung.chiikawagameengine.Window;
 import ch.noseryoung.renderer.DebugDraw;
 import ch.noseryoung.util.Settings;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+/**
+ * This component creates a Grind over the whole screen.
+ */
 public class GridLines extends Component {
 
     @Override
@@ -14,20 +16,20 @@ public class GridLines extends Component {
         Vector2f cameraPos = Window.getCurrentScene().getCamera().position;
         Vector2f projectionSize = Window.getCurrentScene().getCamera().getProjectionSize();
 
-        int firstX = ((int)(cameraPos.x / Settings.GRID_WIDTH) - 1) * Settings.GRID_HEIGHT;
-        int firstY = ((int)(cameraPos.y / Settings.GRID_HEIGHT) - 1) * Settings.GRID_HEIGHT;
+        int firstX = ((int)(cameraPos.x / Settings.Grid.WIDTH) - 1) * Settings.Grid.HEIGHT;
+        int firstY = ((int)(cameraPos.y / Settings.Grid.HEIGHT) - 1) * Settings.Grid.HEIGHT;
 
-        int numVtLines = (int)(projectionSize.x / Settings.GRID_WIDTH) + 2;
-        int numHzLines = (int)(projectionSize.y / Settings.GRID_HEIGHT) + 2;
+        int numVtLines = (int)(projectionSize.x / Settings.Grid.WIDTH) + 2;
+        int numHzLines = (int)(projectionSize.y / Settings.Grid.HEIGHT) + 2;
 
-        int height = (int)projectionSize.y + Settings.GRID_HEIGHT * 2;
-        int width = (int)projectionSize.x + Settings.GRID_WIDTH * 2;
+        int height = (int)projectionSize.y + Settings.Grid.HEIGHT * 2;
+        int width = (int)projectionSize.x + Settings.Grid.WIDTH * 2;
 
         int maxLines = Math.max(numVtLines, numHzLines);
         Vector3f color = new Vector3f(0.2f, 0.2f, 0.2f);
         for (int i=0; i < maxLines; i++) {
-            int x = firstX + (Settings.GRID_WIDTH * i);
-            int y = firstY + (Settings.GRID_HEIGHT * i);
+            int x = firstX + (Settings.Grid.WIDTH * i);
+            int y = firstY + (Settings.Grid.HEIGHT * i);
 
             if (i < numVtLines) {
                 DebugDraw.addLine2D(new Vector2f(x, firstY), new Vector2f(x, firstY + height), color);

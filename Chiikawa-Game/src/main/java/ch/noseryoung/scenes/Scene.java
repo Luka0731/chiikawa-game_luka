@@ -1,8 +1,10 @@
 package ch.noseryoung.scenes;
 
 import ch.noseryoung.chiikawagameengine.Camera;
-import ch.noseryoung.chiikawagameengine.Component;
+import ch.noseryoung.components.Component;
 import ch.noseryoung.chiikawagameengine.GameObject;
+import ch.noseryoung.components.Sprite;
+import ch.noseryoung.components.SpriteRenderer;
 import ch.noseryoung.renderer.Renderer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,19 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Scene {
-
     protected Renderer renderer = new Renderer();
     protected Camera camera;
     private boolean isRunning = false;
-    protected List<GameObject> gameObjects = new ArrayList<GameObject>();
+    protected List<GameObject> gameObjects = new ArrayList<>();
     protected GameObject activeGameObject = null;
     protected boolean isLevelLoaded = false;
-
-    public Scene() {}
-
-    public void init() {}
-
-    public abstract void update(float dt);
 
     public void start() {
         for (GameObject gameObject : gameObjects) {
@@ -48,7 +43,7 @@ public abstract class Scene {
         }
     }
 
-    public void sceneImGui() {
+    public void updateImGuiInScene() {
         if (activeGameObject != null) {
             ImGui.begin("Inspector");
             activeGameObject.imGui();
@@ -57,37 +52,40 @@ public abstract class Scene {
         imGui();
     }
 
-    public void imGui() {}
 
+    // |--- serialization ---|
     // todo: make whole system better
-    public void saveExit() {
+
+    public void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter fw = new FileWriter("level.txt");
             fw.write(gson.toJson(gameObjects));
             fw.close();
         } catch (IOException e) {
-            e.printStackTrace(); // todo: make this better
+            assert false : "Failed to save game objects to level.txt: " + e.getMessage();
         }
     }
 
-    // todo: make whole system better
-    // todo: fix multiple loading
     public void load() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String inFile = "";
         try {
             inFile = new String(Files.readAllBytes(Paths.get("level.txt")));
         } catch (IOException e) {
-            e.printStackTrace(); // todo: better error message
+            assert false : "Failed to read from level.txt: " + e.getMessage();
         }
-
         if (!inFile.isEmpty()) {
             int maxGameObjectId = -1;
             int maxComponentId = -1;
             GameObject[] gameObjects = gson.fromJson(inFile, GameObject[].class);
             for (int i = 0; i < gameObjects.length; i++) {
                 addGameObjectToScene(gameObjects[i]);
+
+                SpriteRenderer sr = gameObjects[i].getComponent(SpriteRenderer.class);
+                if (sr != null) {
+                    sr.setDirty();  // <<< Wichtig!
+                }
 
                 for (Component component : gameObjects[i].getComponents()) {
                     if(component.getUid() > maxComponentId) {
@@ -98,7 +96,6 @@ public abstract class Scene {
                     maxGameObjectId =  gameObjects[i].getUid();
                 }
             }
-
             maxGameObjectId++;
             maxComponentId++;
             GameObject.init(maxGameObjectId);
@@ -106,6 +103,18 @@ public abstract class Scene {
             this.isLevelLoaded = true;
         }
     }
+
+
+    // |--- empty methods to override ---|
+
+    public void init() {}
+
+    public abstract void update(float dt);
+
+    public void imGui() {}
+
+
+    // |--- getters & setters ---|
 
     public Camera getCamera() {
         return camera;

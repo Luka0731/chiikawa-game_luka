@@ -8,15 +8,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-// todo: improve paths
-// todo: also can make it so it throws error if not exists
-// todo: small rework needed, cause there is a bug with the ids (episode 22)
 public class AssetPool {
-    private static Map<String, Shader> shaders = new HashMap<>();
-    private static Map<String, Texture> textures = new HashMap<>();
-    private static Map<String, Spritesheet> spritesheets = new HashMap<>();
+    private static final Map<String, Shader> shaders = new HashMap<>();
+    private static final Map<String, Texture> textures = new HashMap<>();
+    private static final Map<String, Spritesheet> spritesheets = new HashMap<>();
 
-    public static Shader getShader(String resourceName) {
+    public static Shader addOrGetShader(String resourceName) {
         File file = new File(resourceName);
         if (shaders.containsKey(file.getAbsolutePath())) {
             return shaders.get(file.getAbsolutePath());
@@ -27,7 +24,7 @@ public class AssetPool {
         return shader;
     }
 
-    public static Texture getTexture(String resourceName) {
+    public static Texture addOrGetTexture(String resourceName) {
         File file = new File(resourceName);
         if (textures.containsKey(file.getAbsolutePath())) {
             return AssetPool.textures.get(file.getAbsolutePath());
@@ -41,15 +38,13 @@ public class AssetPool {
     public static void addSpritesheet (String resourceName, Spritesheet spritesheet) {
         File file = new File(resourceName);
         if (!spritesheets.containsKey(file.getAbsolutePath())) {
-            spritesheets.put(file.getAbsolutePath(), spritesheet); // todo: maybe fix, tutorial cinda sus
+            spritesheets.put(file.getAbsolutePath(), spritesheet);
         }
     }
 
     public static Spritesheet getSpritesheet (String resourceName) {
         File file = new File(resourceName);
-        if (!spritesheets.containsKey(file.getAbsolutePath())) {
-            assert false : "Error: Tried to access spritesheet '" + resourceName + "' and it has not been added to asset pool.";
-        }
+        assert spritesheets.containsKey(file.getAbsolutePath()) : "Error: Tried to access spritesheet '" + resourceName + "' and it has not been added to asset pool.";
         return spritesheets.getOrDefault(file.getAbsolutePath(), null);
     }
 }

@@ -14,6 +14,16 @@ public class Sprite {
             new Vector2f(0.0f, 1.0f),
     };
 
+    public void init(float width, float height, Texture texture, Vector2f[] textureCoords) {
+        this.width = width;
+        this.height = height;
+        this.texture = texture;
+        this.textureCoords = textureCoords;
+    }
+
+
+    // |--- getters & setters ---|
+
     public Texture getTexture() {
         return texture;
     }
@@ -32,21 +42,5 @@ public class Sprite {
 
     public int getTextureId() {
         return texture == null ? -1 : texture.getId();
-    }
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }
-
-    public void setTextureCoords(Vector2f[] textureCoords) {
-        this.textureCoords = textureCoords;
-    }
-
-    public void setWidth(float width) {
-        this.width = width;
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
     }
 }

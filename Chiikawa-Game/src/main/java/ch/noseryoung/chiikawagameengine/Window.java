@@ -4,6 +4,7 @@ import ch.noseryoung.renderer.DebugDraw;
 import ch.noseryoung.scenes.RoomEditorScene;
 import ch.noseryoung.scenes.RoomScene;
 import ch.noseryoung.scenes.Scene;
+import ch.noseryoung.util.Settings;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -15,9 +16,7 @@ import static org.lwjgl.opengl.GL11C.glClear;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
-
     int width, height;
-    String title;
     private static Window window = null; // singleton
     private long glfwWindow; // the memory space location of the window (pointer)
     private ImGuiLayer imGuiLayer;
@@ -26,35 +25,6 @@ public class Window {
     private Window() {
         this.width = 1920;
         this.height = 1080;
-        this.title = "Chiikawa Game!";
-    }
-
-    // todo: not making this with int, but passing trought the actual scene
-    public static void changeScene(int newScene) {
-        switch (newScene) {
-            case 0:
-                currentScene = new RoomEditorScene();
-                break;
-            case 1:
-                currentScene = new RoomScene();
-                break;
-            default:
-                assert false : "Unknown scene '" + newScene + "'.";
-        }
-        currentScene.load();
-        currentScene.init();
-        currentScene.start();
-    }
-
-    public static Window getWindow() {
-        if (Window.window == null) {
-            Window.window = new Window();
-        }
-        return Window.window;
-    }
-
-    public static Scene getCurrentScene() {
-        return getWindow().currentScene;
     }
 
     public void run() {
@@ -85,7 +55,7 @@ public class Window {
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);  // when the window starts, it's in the maximized position
 
         // create window
-        glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
+        glfwWindow = glfwCreateWindow(this.width, this.height, Settings.Game.TITLE, NULL, NULL);
         if (glfwWindow == NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
@@ -136,7 +106,7 @@ public class Window {
 
             DebugDraw.beginFrame();
 
-            glClearColor(1, 1, 1, 1);
+            glClearColor(1, 1, 1, 1); // makes a white background color
             glClear(GL_COLOR_BUFFER_BIT); // clears the color with the color that was made one line up
 
             if(dt >= 0) {
@@ -151,7 +121,38 @@ public class Window {
             dt = endTime - beginTime;
             beginTime = endTime;
         }
-        currentScene.saveExit();
+        currentScene.save();
+    }
+
+    // todo: not making this with int, but passing through the actual scene
+    public static void changeScene(int newScene) {
+        switch (newScene) {
+            case 0:
+                currentScene = new RoomEditorScene();
+                break;
+            case 1:
+                currentScene = new RoomScene();
+                break;
+            default:
+                assert false : "Unknown scene '" + newScene + "'.";
+        }
+        currentScene.load();
+        currentScene.init();
+        currentScene.start();
+    }
+
+
+    // |--- getters & setters ---|
+
+    public static Window getWindow() {
+        if (Window.window == null) {
+            Window.window = new Window();
+        }
+        return Window.window;
+    }
+
+    public static Scene getCurrentScene() {
+        return getWindow().currentScene;
     }
 
     public static int getWidth() {

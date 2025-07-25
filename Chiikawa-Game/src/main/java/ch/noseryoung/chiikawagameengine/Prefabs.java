@@ -1,13 +1,13 @@
-package ch.noseryoung.util;
+package ch.noseryoung.chiikawagameengine;
 
-import ch.noseryoung.chiikawagameengine.GameObject;
-import ch.noseryoung.chiikawagameengine.Transform;
 import ch.noseryoung.components.Sprite;
 import ch.noseryoung.components.SpriteRenderer;
 import org.joml.Vector2f;
 
-// this class contains methods to make some things easier
-// todo: delte it later and finde a new methond, instead of this
+/**
+ * This class has some useful methods, to cut some often used code in
+ * other classes.
+ */
 public class Prefabs {
 
     public static GameObject generateSpriteObject(Sprite sprite, float sizeX, float sizeY) {
@@ -19,5 +19,4 @@ public class Prefabs {
 
         return block;
     }
-
 }

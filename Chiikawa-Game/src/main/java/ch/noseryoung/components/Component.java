@@ -1,6 +1,7 @@
-package ch.noseryoung.chiikawagameengine;
+package ch.noseryoung.components;
 
-import ch.noseryoung.util.ComponentTypeAdapter;
+import ch.noseryoung.chiikawagameengine.ComponentTypeAdapter;
+import ch.noseryoung.chiikawagameengine.GameObject;
 import com.google.gson.annotations.JsonAdapter;
 import imgui.ImGui;
 import org.joml.Vector3f;
@@ -16,9 +17,13 @@ public abstract class Component {
 
     public transient GameObject gameObject = null;
 
+    public static void init(int maxId) {
+        ID_COUNTER = maxId;
+    }
+
     public void start() {}
 
-    public void update(float dt) {};
+    public void update(float dt) {}
 
     public void imGui() {
         try {
@@ -85,9 +90,8 @@ public abstract class Component {
         }
     }
 
-    public static void init(int maxId) {
-        ID_COUNTER = maxId;
-    }
+
+    // |--- getters & setters ---|
 
     public int getUid() {
         return uid;

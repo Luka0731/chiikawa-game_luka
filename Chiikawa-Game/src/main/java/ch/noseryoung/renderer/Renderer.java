@@ -8,28 +8,37 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * The Renderer class is responsible for managing and coordinating the rendering process.
+ * It organizes game objects into render batches and ensures they are drawn efficiently.
+ *
+ * This class reduces the number of draw calls by grouping objects with similar properties,
+ * such as shared textures or z-index, into batches (aka RenderBatch). It then delegates
+ * the actual rendering to each corresponding RenderBatch.
+ */
 public class Renderer {
     private final int MAX_BATCH_SIZE = 1000;
-    private List<RenderBatch> batches;
+    private final List<RenderBatch> batches;
 
     public Renderer() {
         this.batches = new ArrayList<>();
     }
 
-    public void add(GameObject go) {
-        SpriteRenderer spr = go.getComponent(SpriteRenderer.class);
+    public void add(GameObject gameObject) {
+        SpriteRenderer spr = gameObject.getComponent(SpriteRenderer.class);
         if (spr != null) {
             add(spr);
         }
     }
 
-    private void add(SpriteRenderer sprite) {
+    // todo: make so batch renderer is not restrictet to one zIndex
+    private void add(SpriteRenderer spriteRenderer) {
         boolean added = false;
         for (RenderBatch batch : batches) {
-            if (batch.hasRoom() && batch.getZIndex() == sprite.gameObject.getZIndex()) { // todo: make so batch renderer is not restrictet to one zIndex
-                Texture texture = sprite.getTexture();
+            if (batch.hasRoom() && batch.getZIndex() == spriteRenderer.gameObject.getZIndex()) {
+                Texture texture = spriteRenderer.getTexture();
                 if (batch.hasTexture(texture) || batch.hasTextureRoom() || texture == null) {
-                    batch.addSprite(sprite);
+                    batch.addSprite(spriteRenderer);
                     added = true;
                     break;
                 }
@@ -37,10 +46,10 @@ public class Renderer {
         }
 
         if (!added) {
-            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, sprite.gameObject.getZIndex());
+            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, spriteRenderer.gameObject.getZIndex());
             newBatch.start();
             batches.add(newBatch);
-            newBatch.addSprite(sprite);
+            newBatch.addSprite(spriteRenderer);
             Collections.sort(batches);
         }
     }

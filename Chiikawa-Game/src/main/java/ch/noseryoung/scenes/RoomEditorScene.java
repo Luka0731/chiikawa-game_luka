@@ -4,20 +4,16 @@ import ch.noseryoung.chiikawagameengine.Camera;
 import ch.noseryoung.chiikawagameengine.GameObject;
 import ch.noseryoung.chiikawagameengine.Transform;
 import ch.noseryoung.components.*;
-import ch.noseryoung.renderer.DebugDraw;
 import ch.noseryoung.util.AssetPool;
-import ch.noseryoung.util.Prefabs;
+import ch.noseryoung.chiikawagameengine.Prefabs;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class RoomEditorScene extends Scene {
-
     private Spritesheet sprites;
-
-    GameObject levelEditorStuff = new GameObject("LevelEditorStuff", new Transform(new Vector2f()), 0);
+    private GameObject levelEditorStuff = new GameObject("LevelEditorStuff",
+            new Transform(new Vector2f()), 0); // todo: make it not declare in the attribute
 
     @Override
     public void init() {
@@ -26,19 +22,19 @@ public class RoomEditorScene extends Scene {
 
         loadResources();
 
-        // testing
         this.camera = new Camera(new Vector2f(-250, -50));
         sprites = AssetPool.getSpritesheet("assets/images/decorationsAndBlocks.png");
         if (isLevelLoaded) {
-            this.activeGameObject = gameObjects.get(0);
+            this.activeGameObject = gameObjects.get(0); // testing
             return;
         }
 
+//        | --- Testing -------------------------------------------------------------------------------------|
 //        GameObject obj1 = new GameObject("Object 1, object with image",
 //                new Transform(new Vector2f(20, 100), new Vector2f(300, 157)), 0);
 //        SpriteRenderer obj1SpriteRenderer = new SpriteRenderer();
 //        Sprite obj1Sprite = new Sprite();
-//        obj1Sprite.setTexture(AssetPool.getTexture("assets/images/ChiikawaGang.png"));
+//        obj1Sprite.setTexture(AssetPool.addOrGetTexture("assets/images/ChiikawaGang.png"));
 //        obj1SpriteRenderer.setSprite(obj1Sprite);
 //        obj1.addComponent(obj1SpriteRenderer);
 //        obj1.addComponent(new Rigidbody());
@@ -52,14 +48,15 @@ public class RoomEditorScene extends Scene {
 //        this.addGameObjectToScene(obj2);
 //
 //        this.activeGameObject = obj1;
+//        | ------------------------------------------------------------------------------------------------|
+
     }
 
     private void loadResources() {
-        AssetPool.getShader("assets/shaders/default.glsl");
+        AssetPool.addOrGetShader("assets/shaders/default.glsl");
         AssetPool.addSpritesheet("assets/images/decorationsAndBlocks.png",
-                new Spritesheet(AssetPool.getTexture("assets/images/decorationsAndBlocks.png"),
+                new Spritesheet(AssetPool.addOrGetTexture("assets/images/decorationsAndBlocks.png"),
                         16, 16, 81, 0));
-//        AssetPool.getTexture("assets/images/ChiikawaGang.png");
     }
 
     @Override
@@ -75,8 +72,7 @@ public class RoomEditorScene extends Scene {
 
     @Override
     public void imGui() {
-        // testing
-        ImGui.begin("Test window");
+        ImGui.begin("Block Palette");
 
         ImVec2 windowPos = new ImVec2();
         ImGui.getWindowPos(windowPos);

@@ -1,7 +1,8 @@
-|---------  Explanations ---------|
+|---------  Game Engine Explanations  ---------|
 
 |--- introduction ---|
-This txt-document has just some general theory and explanations to concepts that are important to this project
+This txt-document has just some general theory about the game engine and explanations to concepts that are
+important to this project.
 
 |--- LWJGL Guide ---|
 https://www.lwjgl.org/guide
@@ -10,19 +11,8 @@ https://www.lwjgl.org/guide
 A callback is a function that you register, and the system (or library) calls automatically when a specific event
 happens. This website shows GLFW Callbacks that can be used: https://www.glfw.org/docs/3.3/input_guide.html
 
-|--- lambda expression ---|
-Lambda expressions are a shorthand way to create anonymous functions (functions without a name) in Java.
-They are mainly used to pass behavior (like what should happen when a key is pressed) into methods or callbacks.
-Instead of creating a full class or method, you write the logic directly as a parameter — clean and compact.
-There is more to lambda expression, but it's a too big of a concept to explain in this text.
-
-|--- callback ---|
+|--- mods ---|
 mods in the listener classes are just additional key/buttons that are pressed with other buttons.
-
-|--- Java Assertions ---|
-Used for debugging logic short and quickly. It isn't used for user input
-Syntax: assert x > 0 : "Error message";
-It's default disabled, so to enable wright: java -ea YourProgram
 
 |--- graphics programming ---|
 Huge thema that is explained in a quick overview in these videos:
@@ -55,9 +45,6 @@ Some important technical terms to graphics programming:
 This is more of a naming convention. It's a method you create to set up something before it starts running like
 preparing a window, loading assets, or setting variables. The use of it is, to keep the constructor clean and other
 
-|--- regex ---|
--
-
 |--- game camera ---|
 Here I explain some concepts to stuff that has to do with the game camera.
 Here is also a link to an explaining video: https://youtu.be/r857cbEtEY8?si=EJUJfEhj5aEedSGE
@@ -76,12 +63,6 @@ Defines near and far limits of camera view; anything outside gets clipped (not r
 
 |--- object oriented programming, component pattern, data oriented design, entity component system ---|
 Explanation link: https://youtu.be/HkG8ZdhoXhs?si=fnx1pB3C0TICoXnb
-
-|--- generics ---|
-Explanation link: https://youtu.be/K1iu1kXkVoA?si=3c6VNVa50SgiIXHN
-
-|--- casting ---|
--
 
 |--- batch rendering ---|
 -

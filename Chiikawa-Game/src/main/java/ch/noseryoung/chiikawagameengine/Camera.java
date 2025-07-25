@@ -24,6 +24,9 @@ public class Camera {
         projectionMatrix.invert(inverseProjectionMatrix);
     }
 
+
+    // |--- getters & setters ---|
+
     public Matrix4f getViewMatrix() {
         Vector3f cameraFront = new Vector3f(0.0f, 0.0f, -1.0f);
         Vector3f cameraUp = new Vector3f(0.0f, 1.0f, 0.0f);

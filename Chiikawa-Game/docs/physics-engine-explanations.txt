@@ -1,0 +1,5 @@
+|---------  Physics Engine Explanations  ---------|
+
+|--- introduction ---|
+This txt-document has just some general theory about the physics engine and explanations to concepts that are
+important to this project.

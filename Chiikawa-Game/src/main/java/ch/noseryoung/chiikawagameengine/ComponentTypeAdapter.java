@@ -1,6 +1,6 @@
-package ch.noseryoung.util;
+package ch.noseryoung.chiikawagameengine;
 
-import ch.noseryoung.chiikawagameengine.Component;
+import ch.noseryoung.components.Component;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

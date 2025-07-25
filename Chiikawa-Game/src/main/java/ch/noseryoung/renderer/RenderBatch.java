@@ -3,7 +3,6 @@ package ch.noseryoung.renderer;
 import ch.noseryoung.chiikawagameengine.Window;
 import ch.noseryoung.components.SpriteRenderer;
 import ch.noseryoung.util.AssetPool;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -17,38 +16,43 @@ import static org.lwjgl.opengl.GL20C.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+/**
+ * The RenderBatch class is responsible for rendering a group of sprites in a single draw call.
+ *
+ * It stores the vertex data of multiple game objects that share similar rendering properties
+ * (such as the same texture or z-index) and uploads them together to the GPU to improve performance.
+ *
+ * Each batch manages its own OpenGL buffers (VAO, VBO, EBO) and handles dynamic updates
+ * when objects change. The render() method sends all stored data to the GPU for rendering.
+ */
 public class RenderBatch implements Comparable<RenderBatch>{
-    // Vertex
-    // ======
-    // Pos               Color                          tex coords      tex id
-    // float, float,     float, float, float, float,    float, float,   float
-    private final int POS_SIZE = 2;
+    private final int POSITION_SIZE = 2;
     private final int COLOR_SIZE = 4;
-    private final int TEX_COORDS_SIZE = 2;
-    private final int TEX_ID_SIZE = 1;
+    private final int TEXTURE_COORDS_SIZE = 2;
+    private final int TEXTURE_ID_SIZE = 1;
 
-    private final int POS_OFFSET = 0;
-    private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
-    private final int TEX_COORDS_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
-    private final int TEX_ID_OFFSET = TEX_COORDS_OFFSET + TEX_COORDS_SIZE * Float.BYTES;
+    private final int POSITION_OFFSET = 0;
+    private final int COLOR_OFFSET = POSITION_OFFSET + POSITION_SIZE * Float.BYTES;
+    private final int TEXTURE_COORDS_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
+    private final int TEXTURE_ID_OFFSET = TEXTURE_COORDS_OFFSET + TEXTURE_COORDS_SIZE * Float.BYTES;
     private final int VERTEX_SIZE = 9;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
-    private SpriteRenderer[] sprites;
+    private final SpriteRenderer[] sprites;
     private int numSprites;
     private boolean hasRoom;
-    private float[] vertices;
-    private int[] texSlots = {0, 1, 2, 3, 4, 5, 6, 7};
+    private final float[] vertices;
+    private final int[] textureSlots = {0, 1, 2, 3, 4, 5, 6, 7};
 
-    private List<Texture> textures;
+    private final List<Texture> textures;
     private int vaoID, vboID;
-    private int maxBatchSize;
-    private Shader shader;
+    private final int maxBatchSize;
+    private final Shader shader;
 
     private int zIndex;
 
     public RenderBatch(int maxBatchSize, int zIndex) {
-        shader = AssetPool.getShader("assets/shaders/default.glsl");
+        shader = AssetPool.addOrGetShader("assets/shaders/default.glsl");
         shader.compileAndLinkShader();
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
@@ -79,16 +83,16 @@ public class RenderBatch implements Comparable<RenderBatch>{
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
         // enable the buffer attribute pointers
-        glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, POS_OFFSET);
+        glVertexAttribPointer(0, POSITION_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, POSITION_OFFSET);
         glEnableVertexAttribArray(0);
 
         glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, COLOR_OFFSET);
         glEnableVertexAttribArray(1);
 
-        glVertexAttribPointer(2, TEX_COORDS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_COORDS_OFFSET);
+        glVertexAttribPointer(2, TEXTURE_COORDS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEXTURE_COORDS_OFFSET);
         glEnableVertexAttribArray(2);
 
-        glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_ID_OFFSET);
+        glVertexAttribPointer(3, TEXTURE_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEXTURE_ID_OFFSET);
         glEnableVertexAttribArray(3);
     }
 
@@ -116,10 +120,11 @@ public class RenderBatch implements Comparable<RenderBatch>{
         // checking if anything changed, and if a sprite changed, it rebuffers that
         boolean rebufferData = false;
         for (int i = 0; i < numSprites; i++) {
-            SpriteRenderer sprite = sprites[i];
-            if (sprite.isDirty()) {
+            SpriteRenderer spriteRenderer = sprites[i];
+
+            if (true) {
                 loadVertexProperties(i);
-                sprite.setClean();
+                spriteRenderer.setClean();
                 rebufferData = true;
             }
         }
@@ -136,7 +141,7 @@ public class RenderBatch implements Comparable<RenderBatch>{
             glActiveTexture(GL_TEXTURE0 + i + 1);
             textures.get(i).bindTexture();
         }
-        shader.uploadIntArray("uTextures", texSlots);
+        shader.uploadIntArray("uTextures", textureSlots);
 
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);
@@ -156,19 +161,19 @@ public class RenderBatch implements Comparable<RenderBatch>{
     }
 
     private void loadVertexProperties(int index) {
-        SpriteRenderer sprite = this.sprites[index];
+        SpriteRenderer spriteRenderer = this.sprites[index];
 
-        // Find offset within array (4 vertices per sprite)
+        // Find offset within array (4 vertices per spriteRenderer)
         int offset = index * 4 * VERTEX_SIZE;
 
-        Vector4f color = sprite.getColor();
-        Vector2f[] texCoords = sprite.getTextureCoords();
+        Vector4f color = spriteRenderer.getColor();
+        Vector2f[] texCoords = spriteRenderer.getTextureCoords();
 
         int texId = 0;
         // lops through textures, until it finds the right one
-        if (sprite.getTexture() != null) {
+        if (spriteRenderer.getTexture() != null) {
             for (int i = 0; i < textures.size(); i++) {
-                if (textures.get(i).equals(sprite.getTexture())) {
+                if (textures.get(i).equals(spriteRenderer.getTexture())) {
                     texId = i + 1;
                     break;
                 }
@@ -188,8 +193,10 @@ public class RenderBatch implements Comparable<RenderBatch>{
             }
 
             // load position
-            vertices[offset] = sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x);
-            vertices[offset + 1] = sprite.gameObject.transform.position.y + (yAdd * sprite.gameObject.transform.scale.y);
+            vertices[offset] = spriteRenderer.gameObject.transform.position.x
+                    + (xAdd * spriteRenderer.gameObject.transform.scale.x);
+            vertices[offset + 1] = spriteRenderer.gameObject.transform.position.y
+                    + (yAdd * spriteRenderer.gameObject.transform.scale.y);
 
             // load color
             vertices[offset + 2] = color.x;
@@ -197,7 +204,7 @@ public class RenderBatch implements Comparable<RenderBatch>{
             vertices[offset + 4] = color.z;
             vertices[offset + 5] = color.w;
 
-            // load tex cords
+            // load texture cords
             vertices[offset + 6] = texCoords[i].x;
             vertices[offset + 7] = texCoords[i].y;
 
@@ -234,6 +241,14 @@ public class RenderBatch implements Comparable<RenderBatch>{
         elements[offsetArrayIndex + 5] = offset + 1;
     }
 
+    @Override
+    public int compareTo(RenderBatch renderBatch) {
+        return Integer.compare(zIndex, renderBatch.zIndex);
+    }
+
+
+    // |--- getters & setters ---|
+
     public boolean hasRoom() {
         return this.hasRoom;
     }
@@ -248,10 +263,5 @@ public class RenderBatch implements Comparable<RenderBatch>{
 
     public int getZIndex() {
         return zIndex;
-    }
-
-    @Override
-    public int compareTo(RenderBatch o) {
-        return Integer.compare(zIndex, o.zIndex);
     }
 }
