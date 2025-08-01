@@ -25,7 +25,7 @@ public class RoomEditorScene extends Scene {
         this.camera = new Camera(new Vector2f(-250, -50));
         sprites = AssetPool.getSpritesheet("assets/images/decorationsAndBlocks.png");
         if (isLevelLoaded) {
-            this.activeGameObject = gameObjects.get(0); // testing
+            // this.activeGameObject = gameObjects.get(0); // testing
             return;
         }
 

@@ -26,6 +26,9 @@ repositories {
 }
 
 dependencies {
+    // JUnit
+    testImplementation('junit:junit:4.13.1')
+
     // Gson
     implementation 'com.google.code.gson:gson:2.13.1'
 

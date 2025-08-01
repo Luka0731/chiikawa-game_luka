@@ -9,6 +9,7 @@ import org.joml.Vector3f;
  *
  * The actual rendering and management logic is handled by the DebugDraw class.
  */
+// todo: now that there is line in the physics engine, change stuff up to use this
 public class Line2D {
     private final Vector2f fromPosition;
     private final Vector2f toPosition;
@@ -20,6 +21,13 @@ public class Line2D {
         this.toPosition = toPosition;
         this.color = color;
         this.lifetimeInFrames = lifetimeInFrames;
+    }
+
+    public Line2D(Vector2f fromPosition, Vector2f toPosition) {
+        this.fromPosition = fromPosition;
+        this.toPosition = toPosition;
+        color = new Vector3f(0.0f, 0.0f, 0.0f);
+        lifetimeInFrames = 1;
     }
 
     public int beginFrame() {
@@ -40,5 +48,9 @@ public class Line2D {
 
     public Vector3f getColor() {
         return color;
+    }
+
+    public float getLengthSquared() {
+        return new Vector2f(toPosition).sub(fromPosition).lengthSquared();
     }
 }
