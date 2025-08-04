@@ -1,5 +1,6 @@
 package ch.noseryoung.renderer;
 
+import ch.noseryoung.chiikawa2dphysicsengine.primitives.Line;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -10,22 +11,18 @@ import org.joml.Vector3f;
  * The actual rendering and management logic is handled by the DebugDraw class.
  */
 // todo: now that there is line in the physics engine, change stuff up to use this
-public class Line2D {
-    private final Vector2f fromPosition;
-    private final Vector2f toPosition;
+public class DebugDrawLine extends Line {
     private final Vector3f color;
     private int lifetimeInFrames;
 
-    public Line2D(Vector2f fromPosition, Vector2f toPosition, Vector3f color, int lifetimeInFrames) {
-        this.fromPosition = fromPosition;
-        this.toPosition = toPosition;
+    public DebugDrawLine(Vector2f fromPosition, Vector2f toPosition, Vector3f color, int lifetimeInFrames) {
+        super(fromPosition, toPosition);
         this.color = color;
         this.lifetimeInFrames = lifetimeInFrames;
     }
 
-    public Line2D(Vector2f fromPosition, Vector2f toPosition) {
-        this.fromPosition = fromPosition;
-        this.toPosition = toPosition;
+    public DebugDrawLine(Vector2f fromPosition, Vector2f toPosition) {
+        super(fromPosition, toPosition);
         color = new Vector3f(0.0f, 0.0f, 0.0f);
         lifetimeInFrames = 1;
     }
@@ -38,19 +35,7 @@ public class Line2D {
 
     // |--- getters & setters ---|
 
-    public Vector2f getFromPosition() {
-        return fromPosition;
-    }
-
-    public Vector2f getToPosition() {
-        return toPosition;
-    }
-
     public Vector3f getColor() {
         return color;
-    }
-
-    public float getLengthSquared() {
-        return new Vector2f(toPosition).sub(fromPosition).lengthSquared();
     }
 }

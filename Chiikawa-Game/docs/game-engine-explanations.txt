@@ -82,3 +82,6 @@ acts as a boolean variable indicating a condition to be either true or false
 
 |--- traditional serialization and serialization with reflection ---|
 -
+
+|--- framebuffers  ---|
+-

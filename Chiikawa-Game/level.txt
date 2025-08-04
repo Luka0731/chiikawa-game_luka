@@ -283,5 +283,119 @@
       }
     },
     "zIndex": 0
+  },
+  {
+    "uid": 6,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "ch.noseryoung.components.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "textureFilePath": "assets/images/decorationsAndBlocks.png",
+              "id": 2,
+              "width": 112,
+              "height": 192
+            },
+            "textureCoords": [
+              {
+                "x": 0.85714287,
+                "y": 0.75
+              },
+              {
+                "x": 0.85714287,
+                "y": 0.6666667
+              },
+              {
+                "x": 0.71428573,
+                "y": 0.6666667
+              },
+              {
+                "x": 0.71428573,
+                "y": 0.75
+              }
+            ]
+          },
+          "uid": 11
+        }
+      }
+    ],
+    "transform": {
+      "position": {
+        "x": -128.0,
+        "y": 512.0
+      },
+      "scale": {
+        "x": 64.0,
+        "y": 64.0
+      }
+    },
+    "zIndex": 0
+  },
+  {
+    "uid": 7,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "ch.noseryoung.components.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "textureFilePath": "assets/images/decorationsAndBlocks.png",
+              "id": 2,
+              "width": 112,
+              "height": 192
+            },
+            "textureCoords": [
+              {
+                "x": 0.5714286,
+                "y": 0.75
+              },
+              {
+                "x": 0.5714286,
+                "y": 0.6666667
+              },
+              {
+                "x": 0.42857143,
+                "y": 0.6666667
+              },
+              {
+                "x": 0.42857143,
+                "y": 0.75
+              }
+            ]
+          },
+          "uid": 12
+        }
+      }
+    ],
+    "transform": {
+      "position": {
+        "x": 896.0,
+        "y": 576.0
+      },
+      "scale": {
+        "x": 64.0,
+        "y": 64.0
+      }
+    },
+    "zIndex": 0
   }
 ]

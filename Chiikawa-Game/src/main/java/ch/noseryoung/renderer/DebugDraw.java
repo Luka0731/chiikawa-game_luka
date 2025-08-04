@@ -2,6 +2,8 @@ package ch.noseryoung.renderer;
 
 import ch.noseryoung.chiikawagameengine.Window;
 import ch.noseryoung.util.AssetPool;
+import ch.noseryoung.util.ChiikawaMath;
+import ch.noseryoung.util.Settings;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -31,7 +33,7 @@ public class DebugDraw {
     private static final int VERTEX_AMOUNT_PER_LINE = 2;
     private static final int LINE_SIZE = VERTEX_AMOUNT_PER_LINE * VERTEX_SIZE;
 
-    private static final List<Line2D> lines = new ArrayList<>();
+    private static final List<DebugDrawLine> lines = new ArrayList<>();
 
     private static final float[] vertexArray = new float[MAX_LINES * LINE_SIZE];
     private static final Shader shader = AssetPool.addOrGetShader("assets/shaders/debugLine2D.glsl");
@@ -79,7 +81,7 @@ public class DebugDraw {
         if (lines.size() <= 0) return;
 
         int index = 0;
-        for (Line2D line : lines) {
+        for (DebugDrawLine line : lines) {
             for (int i=0; i < 2; i++) {
                 Vector2f position = i == 0 ? line.getFromPosition() : line.getToPosition();
                 Vector3f color = line.getColor();
@@ -121,19 +123,81 @@ public class DebugDraw {
     }
 
 
-    // |--- add methods ---|
+    // |--- add 2D line methods ---|
+    // todo: add constants for common colors
 
-    public static void addLine2D(Vector2f from, Vector2f to) {
-        // todo: add constants for common colors
-        addLine2D(from, to, new Vector3f(0, 1, 0), 1);
-    }
-
-    public static void addLine2D(Vector2f from, Vector2f to, Vector3f color) {
-        addLine2D(from, to, color, 1);
-    }
-
-    public static void addLine2D(Vector2f from, Vector2f to, Vector3f color, int lifetime) {
+    public static void add2DLine(Vector2f from, Vector2f to, Vector3f color, int lifetime) {
         if (lines.size() >= MAX_LINES) return;
-        lines.add(new Line2D(from, to, color, lifetime));
+        lines.add(new DebugDrawLine(from, to, color, lifetime));
+    }
+
+    public static void add2DLine(Vector2f from, Vector2f to, Vector3f color) {
+        add2DLine(from, to, color, 1);
+    }
+
+    public static void add2DLine(Vector2f from, Vector2f to) {
+        add2DLine(from, to, new Vector3f(0, 1, 0), 1);
+    }
+
+
+    // |--- add circle methods ---|
+
+    public static void addCircle(Vector2f center, float radius, Vector3f color, int lifetime) {
+        Vector2f[] points = new Vector2f[Settings.DebugDraw.CIRCLE_SEGMENTS];
+        float increment = 360.0f / points.length;
+        float currentAngle = 0;
+
+        for (int i = 0; i < points.length; i++) {
+            Vector2f tmp = new Vector2f(radius, 0);
+            ChiikawaMath.rotate(tmp, currentAngle, new Vector2f());
+            points[i] = new Vector2f(tmp).add(center);
+
+            if (i > 0) {
+                add2DLine(points[i - 1], points[i], color, lifetime);
+            }
+            currentAngle += increment;
+        }
+
+        add2DLine(points[points.length - 1], points[0], color, lifetime);
+    }
+
+    public static void addCircle(Vector2f center, float radius, Vector3f color) {
+        addCircle(center, radius, color, 1);
+    }
+
+    public static void addCircle(Vector2f center, float radius) {
+        addCircle(center, radius, new Vector3f(0, 1, 0), 1);
+    }
+
+
+    // |--- add rectangle methods ---|
+
+    public static void addRectangle(Vector2f center, Vector2f dimensions, float rotation, Vector3f color, int lifetime) {
+        Vector2f min = new Vector2f(center).sub(new Vector2f(dimensions).div(2.0f));
+        Vector2f max = new Vector2f(center).add(new Vector2f(dimensions).div(2.0f));
+
+        Vector2f[] vertices = {
+                new Vector2f(min.x, min.y), new Vector2f(min.x, max.y),
+                new Vector2f(max.x, max.y), new Vector2f(max.x, min.y)
+        };
+
+        if (rotation != 0.0f) {
+            for (Vector2f vertex : vertices) {
+                ChiikawaMath.rotate(vertex, rotation, center);
+            }
+        }
+
+        add2DLine(vertices[0], vertices[1], color, lifetime);
+        add2DLine(vertices[1], vertices[2], color, lifetime);
+        add2DLine(vertices[2], vertices[3], color, lifetime);
+        add2DLine(vertices[3], vertices[0], color, lifetime);
+    }
+
+    public static void addRectangle(Vector2f center, Vector2f dimensions, float rotation, Vector3f color) {
+        addRectangle(center, dimensions, rotation, color, 1);
+    }
+
+    public static void addRectangle(Vector2f center, Vector2f dimensions, float rotation) {
+        addRectangle(center, dimensions, rotation, new Vector3f(0, 1, 0), 1);
     }
 }
