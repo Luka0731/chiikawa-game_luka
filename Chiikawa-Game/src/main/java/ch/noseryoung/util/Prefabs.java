@@ -1,5 +1,7 @@
-package ch.noseryoung.chiikawagameengine;
+package ch.noseryoung.util;
 
+import ch.noseryoung.chiikawagameengine.GameObject;
+import ch.noseryoung.chiikawagameengine.Transform;
 import ch.noseryoung.components.Sprite;
 import ch.noseryoung.components.SpriteRenderer;
 import org.joml.Vector2f;
