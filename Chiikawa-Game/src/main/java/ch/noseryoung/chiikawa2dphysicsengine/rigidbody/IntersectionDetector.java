@@ -1,6 +1,5 @@
 package ch.noseryoung.chiikawa2dphysicsengine.rigidbody;
 
-import ch.noseryoung.chiikawa2dphysicsengine.primitives.Circle;
 import ch.noseryoung.chiikawa2dphysicsengine.primitives.*;
 import ch.noseryoung.util.ChiikawaMath;
 import org.joml.Vector2f;

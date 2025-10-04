@@ -6,10 +6,11 @@ import ch.noseryoung.chiikawagameengine.Transform;
 import ch.noseryoung.components.*;
 import ch.noseryoung.renderer.DebugDraw;
 import ch.noseryoung.util.AssetPool;
-import ch.noseryoung.util.Prefabs;
+import ch.noseryoung.chiikawagameengine.Prefabs;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class RoomEditorScene extends Scene {
     private Spritesheet sprites;

@@ -14,23 +14,6 @@ public class Texture {
     private int id;
     private int width, height;
 
-    // todo: idk why the tutorial wants this constructor, even to it is not suppose to work
-    public Texture() {
-        id = -1;
-        width = -1;
-        height = -1;
-    }
-
-    public Texture(int width, int height) {
-        this.textureFilePath = "Generated";
-
-        // generate texture on GPU
-        id = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, id);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    }
-
     public void init(String textureFilePath) {
         this.textureFilePath = textureFilePath;
 
@@ -73,15 +56,6 @@ public class Texture {
         stbi_image_free(image); // free the memory (or memory leak happens)
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) return false;
-        if (!(o instanceof Texture)) return false;
-        Texture oTexture = (Texture)o;
-        return oTexture.getWidth() == this.width && oTexture.getHeight() == this.height && oTexture.getId() == this.id
-                && oTexture.getTextureFilePath().equals(this.textureFilePath);
-    }
-
 
     // |--- getters & setters ---|
 
@@ -103,9 +77,5 @@ public class Texture {
 
     public int getId() {
         return id;
-    }
-
-    public String getTextureFilePath() {
-        return textureFilePath;
     }
 }

@@ -1,7 +1,6 @@
 package ch.noseryoung.chiikawagameengine;
 
 import ch.noseryoung.renderer.DebugDraw;
-import ch.noseryoung.renderer.Framebuffer;
 import ch.noseryoung.scenes.RoomEditorScene;
 import ch.noseryoung.scenes.RoomScene;
 import ch.noseryoung.scenes.Scene;
@@ -22,9 +21,6 @@ public class Window {
     private long glfwWindow; // the memory space location of the window (pointer)
     private ImGuiLayer imGuiLayer;
     private static Scene currentScene = null;
-
-    // testing:
-    private Framebuffer framebuffer;
 
     private Window() {
         this.width = 1920;
@@ -96,8 +92,6 @@ public class Window {
         this.imGuiLayer = new ImGuiLayer(glfwWindow);
         this.imGuiLayer.initImGui();
 
-        this.framebuffer = new Framebuffer(this.width, this.height);
-
         Window.changeScene(0); // starting scene
     }
 
@@ -115,12 +109,10 @@ public class Window {
             glClearColor(1, 1, 1, 1); // makes a white background color
             glClear(GL_COLOR_BUFFER_BIT); // clears the color with the color that was made one line up
 
-            framebuffer.bind();
             if(dt >= 0) {
                 DebugDraw.draw();
                 currentScene.update(dt);
             }
-            framebuffer.unbind();
 
             this.imGuiLayer.update(dt, currentScene);
             glfwSwapBuffers(glfwWindow); // swaps the front and back buffer (frame update)
