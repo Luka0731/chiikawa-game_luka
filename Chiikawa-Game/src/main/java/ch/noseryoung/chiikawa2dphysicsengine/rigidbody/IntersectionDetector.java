@@ -43,8 +43,8 @@ public class IntersectionDetector {
         ChiikawaMath.rotate(pointLocalRectangleShape, rectangle.getRigidbody().getRotation(),
                 rectangle.getRigidbody().getPosition());
 
-        Vector2f min = rectangle.getMin();
-        Vector2f max = rectangle.getMax();
+        Vector2f min = rectangle.getLocalMin();
+        Vector2f max = rectangle.getLocalMax();
         return pointLocalRectangleShape.x <= max.x && min.x <= pointLocalRectangleShape.x
                 && pointLocalRectangleShape.y <= max.y && min.y <= pointLocalRectangleShape.y;
     }
@@ -102,7 +102,7 @@ public class IntersectionDetector {
         ChiikawaMath.rotate(localEnd, theta, center);
 
         Line localLine = new Line(localStart, localEnd);
-        AABR aabr = new AABR(rectangle.getMin(), rectangle.getMax());
+        AABR aabr = new AABR(rectangle.getLocalMin(), rectangle.getLocalMax());
 
         return doesLineIntersectAABR(localLine, aabr);
     }
@@ -368,8 +368,8 @@ public class IntersectionDetector {
     private static Vector2f getInterval(Rectangle rectangle, Vector2f axis) {
         Vector2f result = new Vector2f(0, 0);
 
-        Vector2f min = rectangle.getMin();
-        Vector2f max = rectangle.getMax();
+        Vector2f min = rectangle.getLocalMin();
+        Vector2f max = rectangle.getLocalMax();
 
         Vector2f[] vertices = {
                 new Vector2f(min.x, min.y), new Vector2f(min.x, max.y),

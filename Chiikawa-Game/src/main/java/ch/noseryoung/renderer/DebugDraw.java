@@ -36,7 +36,7 @@ public class DebugDraw {
     private static final List<DebugDrawLine> lines = new ArrayList<>();
 
     private static final float[] vertexArray = new float[MAX_LINES * LINE_SIZE];
-    private static final Shader shader = AssetPool.addOrGetShader("assets/shaders/debugLine2D.glsl");
+    private static final Shader shader = AssetPool.addOrGetShader("assets/shaders/debugLine.glsl");
 
     private static int vaoID;
     private static int vboID;

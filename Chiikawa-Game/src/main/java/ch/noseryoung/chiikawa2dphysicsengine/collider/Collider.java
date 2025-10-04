@@ -1,4 +1,4 @@
-package ch.noseryoung.chiikawa2dphysicsengine.primitives;
+package ch.noseryoung.chiikawa2dphysicsengine.collider;
 
 import ch.noseryoung.components.Component;
 import org.joml.Vector2f;
