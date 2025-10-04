@@ -85,3 +85,8 @@ acts as a boolean variable indicating a condition to be either true or false
 
 |--- framebuffers  ---|
 -
+
+|--- rbo  ---|
+RBO is another Framebuffer Object from OpenGl, like VBO and VAO. It stands for Render Buffer Object. Simply explained
+it is used to make the rendering process quicker. From a RBO data is only stored and wirghten and nothing more happens
+to it. It is used in this project for framebuffers.

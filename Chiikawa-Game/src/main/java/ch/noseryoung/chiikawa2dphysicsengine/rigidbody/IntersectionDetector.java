@@ -3,10 +3,10 @@ package ch.noseryoung.chiikawa2dphysicsengine.rigidbody;
 import ch.noseryoung.chiikawa2dphysicsengine.primitives.*;
 import ch.noseryoung.util.ChiikawaMath;
 import org.joml.Vector2f;
-import org.w3c.dom.css.Rect;
 
 // todo: don't use comparison for floating point number (use compare method from ChiikawaMath)
 // todo: as improvement, i could make some private methods, cause multiple methods use similar code
+// todo: look at every acuation again, cause i dont understand everything
 public class IntersectionDetector {
     private final float EPSILON = 0.000001f; // higher epsilon for comparisons with square root numbers
 

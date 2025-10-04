@@ -10,7 +10,6 @@ import org.joml.Vector3f;
  *
  * The actual rendering and management logic is handled by the DebugDraw class.
  */
-// todo: now that there is line in the physics engine, change stuff up to use this
 public class DebugDrawLine extends Line {
     private final Vector3f color;
     private int lifetimeInFrames;
