@@ -1,7 +1,7 @@
 package chiikawa2dphysicsengine;
 
 import ch.noseryoung.chiikawa2dphysicsengine.primitives.AABR;
-import ch.noseryoung.chiikawa2dphysicsengine.colider.Circle;
+import ch.noseryoung.chiikawa2dphysicsengine.primitives.Circle;
 import ch.noseryoung.chiikawa2dphysicsengine.primitives.Line;
 import ch.noseryoung.chiikawa2dphysicsengine.rigidbody.IntersectionDetector;
 import ch.noseryoung.chiikawa2dphysicsengine.rigidbody.Rigidbody;

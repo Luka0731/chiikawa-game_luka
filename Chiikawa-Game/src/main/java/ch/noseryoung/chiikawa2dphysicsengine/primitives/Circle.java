@@ -1,4 +1,4 @@
-package ch.noseryoung.chiikawa2dphysicsengine.colider;
+package ch.noseryoung.chiikawa2dphysicsengine.primitives;
 
 import ch.noseryoung.chiikawa2dphysicsengine.rigidbody.Rigidbody;
 import org.joml.Vector2f;
