@@ -45,13 +45,4 @@ public class AABR {
     public Rigidbody getRigidbody() {
         return rigidbody;
     }
-
-    public void setRigidbody(Rigidbody rigidbody) {
-        this.rigidbody = rigidbody;
-    }
-
-    public void setSize(Vector2f size) {
-        this.size.set(size);
-        halfSize.set(size.x / 2.0f, size.y / 2.0f);
-    }
 }

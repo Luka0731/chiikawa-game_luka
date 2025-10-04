@@ -1,7 +1,6 @@
 package ch.noseryoung.chiikawa2dphysicsengine.primitives;
 
 import ch.noseryoung.chiikawa2dphysicsengine.rigidbody.Rigidbody;
-import ch.noseryoung.util.ChiikawaMath;
 import org.joml.Vector2f;
 
 public class Rectangle {
@@ -24,17 +23,17 @@ public class Rectangle {
 
     // |--- getters & setters ---|
 
-    public Vector2f getLocalMin() {
+    public Vector2f getMin() {
         return new Vector2f(this.rigidbody.getPosition()).sub(this.halfSize);
     }
 
-    public Vector2f getLocalMax() {
+    public Vector2f getMax() {
         return new Vector2f(this.rigidbody.getPosition()).add(this.halfSize);
     }
 
     public Vector2f[] getVertices() {
-        Vector2f min = getLocalMin();
-        Vector2f max = getLocalMax();
+        Vector2f min = getMin();
+        Vector2f max = getMax();
 
         Vector2f[] vertices = {
                 new Vector2f(min.x, min.y),
@@ -45,7 +44,7 @@ public class Rectangle {
         if (rigidbody.getRotation() != 0.0f) {
             for (Vector2f vert : vertices) {
                 // rotates point(Vector2f) about center(Vector2f) by rotating(float in degrees)
-                ChiikawaMath.rotate(vert, rigidbody.getRotation(), rigidbody.getPosition());
+                // ChiikawaMath.rotate(vert, this.rigidbody2D.getPosition(), this.rigidbody2D.getPosition()) // todo: implement it
             }
         }
         return vertices;
@@ -57,14 +56,5 @@ public class Rectangle {
 
     public Rigidbody getRigidbody() {
         return rigidbody;
-    }
-
-    public void setRigidbody(Rigidbody rigidbody) {
-        this.rigidbody = rigidbody;
-    }
-
-    public void setSize(Vector2f size) {
-        this.size.set(size);
-        halfSize.set(size.x / 2.0f, size.y / 2.0f);
     }
 }

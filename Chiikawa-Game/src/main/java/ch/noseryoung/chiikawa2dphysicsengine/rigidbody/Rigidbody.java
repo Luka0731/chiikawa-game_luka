@@ -6,14 +6,7 @@ import org.joml.Vector2f;
 
 public class Rigidbody extends Component {
     private Vector2f position;
-    private float rotation; // in degrees
-
-    private Vector2f linearVelocity;
-    private float angularVelocity;
-    private float linearDamping;
-    private float angularDamping;
-
-    private boolean fixedRotation;
+    private float rotation; // in degrees  // todo: more efficient ways then degrease
 
     public Rigidbody() {
         position = new Vector2f();
@@ -32,16 +25,15 @@ public class Rigidbody extends Component {
         return position;
     }
 
+    public void setPosition(Vector2f position) {
+        this.position = position;
+    }
+
     public float getRotation() {
         return rotation;
     }
 
-    public void setTransform(Vector2f position, float rotation) {
-        this.position.set(position);
+    public void setRotation(float rotation) {
         this.rotation = rotation;
-    }
-
-    public void setTransform(Vector2f position) {
-        this.position.set(position);
     }
 }
