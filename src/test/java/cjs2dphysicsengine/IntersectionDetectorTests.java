@@ -3,6 +3,8 @@ package cjs2dphysicsengine;
 import cjs2dphysicsengine.primitives.AABR;
 import cjs2dphysicsengine.primitives.Circle;
 import cjs2dphysicsengine.primitives.Line;
+import cjs2dphysicsengine.primitives.Ray;
+import cjs2dphysicsengine.primitives.Rectangle;
 import cjs2dphysicsengine.rigidbody.IntersectionDetector;
 import cjs2dphysicsengine.rigidbody.Rigidbody;
 import org.joml.Vector2f;
@@ -58,6 +60,38 @@ public class IntersectionDetectorTests {
         assertTrue(result);
     }
 
+    @Test
+    public void pointInMiddleOfLineShouldReturnTrueTest() {
+        Line line = new Line(new Vector2f(0, 0), new Vector2f(12, 4));
+        Vector2f point = new Vector2f(6, 2);
+        boolean result = IntersectionDetector.isPointOnLine(point, line);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointWithWrongSlopeOnLineShouldReturnFalseTest() {
+        Line line = new Line(new Vector2f(0, 0), new Vector2f(12, 4));
+        Vector2f point = new Vector2f(4, 2);
+        boolean result = IntersectionDetector.isPointOnLine(point, line);
+        assertFalse(result);
+    }
+
+    @Test
+    public void pointOnLineAtOffsetPositionShouldReturnTrueTest() {
+        Line line = new Line(new Vector2f(10, 10), new Vector2f(22, 14));
+        Vector2f point = new Vector2f(16, 12);
+        boolean result = IntersectionDetector.isPointOnLine(point, line);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointNotOnLineAtOffsetPositionShouldReturnFalseTest() {
+        Line line = new Line(new Vector2f(10, 10), new Vector2f(22, 14));
+        Vector2f point = new Vector2f(14, 12);
+        boolean result = IntersectionDetector.isPointOnLine(point, line);
+        assertFalse(result);
+    }
+
 
     // |--- isPointInCircle tests ---|
 
@@ -85,6 +119,38 @@ public class IntersectionDetectorTests {
         assertTrue(result);
     }
 
+    @Test
+    public void pointNearEdgeInsideCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Vector2f point = new Vector2f(-4.9f, 0);
+        boolean result = IntersectionDetector.isPointInCircle(point, circle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointInCircleAtOffsetPositionShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody(new Vector2f(10, 10), 0));
+        Vector2f point = new Vector2f(13, 8);
+        boolean result = IntersectionDetector.isPointInCircle(point, circle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointOutsideCircleAtOffsetPositionShouldReturnFalseTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody(new Vector2f(10, 10), 0));
+        Vector2f point = new Vector2f(4, 4);
+        boolean result = IntersectionDetector.isPointInCircle(point, circle);
+        assertFalse(result);
+    }
+
+    @Test
+    public void pointNearEdgeInsideCircleAtOffsetShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody(new Vector2f(10, 10), 0));
+        Vector2f point = new Vector2f(5.1f, 10);
+        boolean result = IntersectionDetector.isPointInCircle(point, circle);
+        assertTrue(result);
+    }
+
 
     // |--- isPointInAABR tests ---|
 
@@ -96,8 +162,106 @@ public class IntersectionDetectorTests {
         assertTrue(result);
     }
 
+    @Test
+    public void pointInCenterOfAABRShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(5, 5), 0);
+        AABR aabr = new AABR(new Vector2f(0, 0), new Vector2f(10, 10), rb);
+        Vector2f point = new Vector2f(5, 5);
+        boolean result = IntersectionDetector.isPointInAABR(point, aabr);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointOnEdgeOfAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Vector2f min = aabr.getMin();
+        Vector2f point = new Vector2f(min.x, 0);
+        boolean result = IntersectionDetector.isPointInAABR(point, aabr);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointOutsideAABRShouldReturnFalseTest() {
+        AABR aabr = new AABR();
+        Vector2f max = aabr.getMax();
+        Vector2f point = new Vector2f(max.x + 1, max.y + 1);
+        boolean result = IntersectionDetector.isPointInAABR(point, aabr);
+        assertFalse(result);
+    }
+
+    @Test
+    public void pointOnCornerOfAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Vector2f max = aabr.getMax();
+        boolean result = IntersectionDetector.isPointInAABR(max, aabr);
+        assertTrue(result);
+    }
+
 
     // |--- isPointInRectangle tests ---|
+
+    @Test
+    public void pointInRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Vector2f point = new Vector2f(0, 0);
+        boolean result = IntersectionDetector.isPointInRectangle(point, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointOutsideRectangleShouldReturnFalseTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Vector2f point = new Vector2f(10, 10);
+        boolean result = IntersectionDetector.isPointInRectangle(point, rectangle);
+        assertFalse(result);
+    }
+
+    @Test
+    public void pointOnEdgeOfRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Vector2f point = new Vector2f(5, 0);
+        boolean result = IntersectionDetector.isPointInRectangle(point, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointInRotatedRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Vector2f point = new Vector2f(0, 0);
+        boolean result = IntersectionDetector.isPointInRectangle(point, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointOutsideRotatedRectangleShouldReturnFalseTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Vector2f point = new Vector2f(6, 6);
+        boolean result = IntersectionDetector.isPointInRectangle(point, rectangle);
+        assertFalse(result);
+    }
+
+    @Test
+    public void pointInRotatedRectangleAtOffsetShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(10, 10), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Vector2f point = new Vector2f(9, 9);
+        boolean result = IntersectionDetector.isPointInRectangle(point, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void pointOutsideRotatedRectangleAtOffsetShouldReturnFalseTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(10, 10), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Vector2f point = new Vector2f(3.36f, 3.36f);
+        boolean result = IntersectionDetector.isPointInRectangle(point, rectangle);
+        assertFalse(result);
+    }
 
 
 
@@ -107,9 +271,153 @@ public class IntersectionDetectorTests {
 
     // |--- doesLineIntersectCircle tests ---|
 
-    // |--- doesLineIntersectAABR ---|
+    @Test
+    public void lineInsideCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Line line = new Line(new Vector2f(-2, 0), new Vector2f(2, 0));
+        boolean result = IntersectionDetector.doesLineIntersectCircle(line, circle);
+        assertTrue(result);
+    }
 
-    //  |--- doesLineIntersectRectangle ---|
+    @Test
+    public void lineThroughCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Line line = new Line(new Vector2f(-10, 0), new Vector2f(10, 0));
+        boolean result = IntersectionDetector.doesLineIntersectCircle(line, circle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void lineOutsideCircleShouldReturnFalseTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Line line = new Line(new Vector2f(10, 10), new Vector2f(20, 10));
+        boolean result = IntersectionDetector.doesLineIntersectCircle(line, circle);
+        assertFalse(result);
+    }
+
+    @Test
+    public void lineTangentToCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Line line = new Line(new Vector2f(-10, 5), new Vector2f(10, 5));
+        boolean result = IntersectionDetector.doesLineIntersectCircle(line, circle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void lineStartsInCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Line line = new Line(new Vector2f(0, 0), new Vector2f(20, 0));
+        boolean result = IntersectionDetector.doesLineIntersectCircle(line, circle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void lineEndsInCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Line line = new Line(new Vector2f(-20, 0), new Vector2f(0, 0));
+        boolean result = IntersectionDetector.doesLineIntersectCircle(line, circle);
+        assertTrue(result);
+    }
+
+
+    // |--- doesLineIntersectAABR tests ---|
+
+    @Test
+    public void lineInsideAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Line line = new Line(new Vector2f(-2, 0), new Vector2f(2, 0));
+        boolean result = IntersectionDetector.doesLineIntersectAABR(line, aabr);
+        assertTrue(result);
+    }
+
+    @Test
+    public void lineThroughAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Line line = new Line(new Vector2f(-20, 0), new Vector2f(20, 0));
+        boolean result = IntersectionDetector.doesLineIntersectAABR(line, aabr);
+        assertTrue(result);
+    }
+
+    @Test
+    public void lineOutsideAABRShouldReturnFalseTest() {
+        AABR aabr = new AABR();
+        Vector2f max = aabr.getMax();
+        Line line = new Line(new Vector2f(max.x + 5, max.y + 5), new Vector2f(max.x + 10, max.y + 10));
+        boolean result = IntersectionDetector.doesLineIntersectAABR(line, aabr);
+        assertFalse(result);
+    }
+
+    @Test
+    public void lineStartsInAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Line line = new Line(new Vector2f(0, 0), new Vector2f(50, 50));
+        boolean result = IntersectionDetector.doesLineIntersectAABR(line, aabr);
+        assertTrue(result);
+    }
+
+    @Test
+    public void verticalLineThroughAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Line line = new Line(new Vector2f(0, -50), new Vector2f(0, 50));
+        boolean result = IntersectionDetector.doesLineIntersectAABR(line, aabr);
+        assertTrue(result);
+    }
+
+    @Test
+    public void diagonalLineThroughAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Line line = new Line(new Vector2f(-20, -20), new Vector2f(20, 20));
+        boolean result = IntersectionDetector.doesLineIntersectAABR(line, aabr);
+        assertTrue(result);
+    }
+
+
+    // |--- doesLineIntersectRectangle tests ---|
+
+    @Test
+    public void lineInsideRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        Line line = new Line(new Vector2f(-2, 0), new Vector2f(2, 0));
+        boolean result = IntersectionDetector.doesLineIntersectRectangle(line, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void lineThroughRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        Line line = new Line(new Vector2f(-20, 0), new Vector2f(20, 0));
+        boolean result = IntersectionDetector.doesLineIntersectRectangle(line, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void lineOutsideRectangleShouldReturnFalseTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        Line line = new Line(new Vector2f(20, 20), new Vector2f(30, 30));
+        boolean result = IntersectionDetector.doesLineIntersectRectangle(line, rectangle);
+        assertFalse(result);
+    }
+
+    @Test
+    public void lineThroughRotatedRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        Line line = new Line(new Vector2f(-20, 0), new Vector2f(20, 0));
+        boolean result = IntersectionDetector.doesLineIntersectRectangle(line, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void lineOutsideRotatedRectangleShouldReturnFalseTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Line line = new Line(new Vector2f(20, 20), new Vector2f(30, 30));
+        boolean result = IntersectionDetector.doesLineIntersectRectangle(line, rectangle);
+        assertFalse(result);
+    }
 
 
 
@@ -119,9 +427,137 @@ public class IntersectionDetectorTests {
 
     // |--- raycast circle ---|
 
+    @Test
+    public void raycastHitsCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Ray ray = new Ray(new Vector2f(-10, 0), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(circle, ray);
+        assertTrue(result);
+    }
+
+    @Test
+    public void raycastMissesCircleShouldReturnFalseTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Ray ray = new Ray(new Vector2f(-10, 10), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(circle, ray);
+        assertFalse(result);
+    }
+
+    @Test
+    public void raycastFromInsideCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Ray ray = new Ray(new Vector2f(0, 0), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(circle, ray);
+        assertTrue(result);
+    }
+
+    @Test
+    public void raycastAwayFromCircleShouldReturnFalseTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Ray ray = new Ray(new Vector2f(-10, 0), new Vector2f(-1, 0));
+        boolean result = IntersectionDetector.raycast(circle, ray);
+        assertFalse(result);
+    }
+
+    @Test
+    public void raycastDiagonalHitsCircleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Ray ray = new Ray(new Vector2f(-10, -10), new Vector2f(1, 1));
+        boolean result = IntersectionDetector.raycast(circle, ray);
+        assertTrue(result);
+    }
+
+
     // |--- raycast AABR ---|
 
+    @Test
+    public void raycastHitsAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Ray ray = new Ray(new Vector2f(-20, 0), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(aabr, ray);
+        assertTrue(result);
+    }
+
+    @Test
+    public void raycastMissesAABRShouldReturnFalseTest() {
+        AABR aabr = new AABR();
+        Vector2f max = aabr.getMax();
+        Ray ray = new Ray(new Vector2f(-20, max.y + 5), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(aabr, ray);
+        assertFalse(result);
+    }
+
+    @Test
+    public void raycastFromInsideAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Ray ray = new Ray(new Vector2f(0, 0), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(aabr, ray);
+        assertTrue(result);
+    }
+
+    @Test
+    public void raycastAwayFromAABRShouldReturnFalseTest() {
+        AABR aabr = new AABR();
+        Ray ray = new Ray(new Vector2f(-20, 0), new Vector2f(-1, 0));
+        boolean result = IntersectionDetector.raycast(aabr, ray);
+        assertFalse(result);
+    }
+
+    @Test
+    public void raycastDiagonalHitsAABRShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Ray ray = new Ray(new Vector2f(-20, -20), new Vector2f(1, 1));
+        boolean result = IntersectionDetector.raycast(aabr, ray);
+        assertTrue(result);
+    }
+
+
     // |--- raycast rectangle ---|
+
+    @Test
+    public void raycastHitsRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        Ray ray = new Ray(new Vector2f(-20, 0), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(rectangle, ray);
+        assertTrue(result);
+    }
+
+    @Test
+    public void raycastMissesRectangleShouldReturnFalseTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        Ray ray = new Ray(new Vector2f(-20, 20), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(rectangle, ray);
+        assertFalse(result);
+    }
+
+    @Test
+    public void raycastFromInsideRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        Ray ray = new Ray(new Vector2f(0, 0), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(rectangle, ray);
+        assertTrue(result);
+    }
+
+    @Test
+    public void raycastHitsRotatedRectangleShouldReturnTrueTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        Ray ray = new Ray(new Vector2f(-20, 0), new Vector2f(1, 0));
+        boolean result = IntersectionDetector.raycast(rectangle, ray);
+        assertTrue(result);
+    }
+
+    @Test
+    public void raycastMissesRotatedRectangleShouldReturnFalseTest() {
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        Ray ray = new Ray(new Vector2f(-20, 15), new Vector2f(6, 6));
+        boolean result = IntersectionDetector.raycast(rectangle, ray);
+        assertFalse(result);
+    }
 
 
 
@@ -131,13 +567,210 @@ public class IntersectionDetectorTests {
 
     // |--- doesCircleIntersectCircle ---|
 
+    @Test
+    public void overlappingCirclesShouldReturnTrueTest() {
+        Circle circle1 = new Circle(5.0f, new Rigidbody());
+        Circle circle2 = new Circle(5.0f, new Rigidbody(new Vector2f(8, 0), 0));
+        boolean result = IntersectionDetector.doesCircleIntersectCircle(circle1, circle2);
+        assertTrue(result);
+    }
+
+    @Test
+    public void touchingCirclesShouldReturnTrueTest() {
+        Circle circle1 = new Circle(5.0f, new Rigidbody());
+        Circle circle2 = new Circle(5.0f, new Rigidbody(new Vector2f(10, 0), 0));
+        boolean result = IntersectionDetector.doesCircleIntersectCircle(circle1, circle2);
+        assertTrue(result);
+    }
+
+    @Test
+    public void separateCirclesShouldReturnFalseTest() {
+        Circle circle1 = new Circle(5.0f, new Rigidbody());
+        Circle circle2 = new Circle(5.0f, new Rigidbody(new Vector2f(15, 0), 0));
+        boolean result = IntersectionDetector.doesCircleIntersectCircle(circle1, circle2);
+        assertFalse(result);
+    }
+
+    @Test
+    public void concentricCirclesShouldReturnTrueTest() {
+        Circle circle1 = new Circle(5.0f, new Rigidbody());
+        Circle circle2 = new Circle(3.0f, new Rigidbody());
+        boolean result = IntersectionDetector.doesCircleIntersectCircle(circle1, circle2);
+        assertTrue(result);
+    }
+
+
     // |--- doesCircleIntersectAABR ---|
+
+    @Test
+    public void circleOverlapsAABRShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        AABR aabr = new AABR();
+        boolean result = IntersectionDetector.doesCircleIntersectAABR(circle, aabr);
+        assertTrue(result);
+    }
+
+    @Test
+    public void circleOutsideAABRShouldReturnFalseTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody(new Vector2f(50, 50), 0));
+        AABR aabr = new AABR();
+        boolean result = IntersectionDetector.doesCircleIntersectAABR(circle, aabr);
+        assertFalse(result);
+    }
+
+    @Test
+    public void circleTouchesAABRCornerShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Vector2f max = aabr.getMax();
+        Circle circle = new Circle(5.0f, new Rigidbody(new Vector2f(max.x + 3, max.y + 3), 0));
+        boolean result = IntersectionDetector.doesCircleIntersectAABR(circle, aabr);
+        assertTrue(result);
+    }
+
+    @Test
+    public void circleTouchesAABREdgeShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Vector2f max = aabr.getMax();
+        Circle circle = new Circle(5.0f, new Rigidbody(new Vector2f(max.x + 4, 0), 0));
+        boolean result = IntersectionDetector.doesCircleIntersectAABR(circle, aabr);
+        assertTrue(result);
+    }
+
 
     // |--- doesCircleIntersectRectangle ---|
 
+    @Test
+    public void circleOverlapsRectangleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        boolean result = IntersectionDetector.doesCircleIntersectRectangle(circle, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void circleOutsideRectangleShouldReturnFalseTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody(new Vector2f(50, 50), 0));
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        boolean result = IntersectionDetector.doesCircleIntersectRectangle(circle, rectangle);
+        assertFalse(result);
+    }
+
+    @Test
+    public void circleOverlapsRotatedRectangleShouldReturnTrueTest() {
+        Circle circle = new Circle(5.0f, new Rigidbody());
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb);
+        boolean result = IntersectionDetector.doesCircleIntersectRectangle(circle, rectangle);
+        assertTrue(result);
+    }
+
+
     // |--- doesAABRIntersectAABR ---|
+
+    @Test
+    public void overlappingAABRsShouldReturnTrueTest() {
+        AABR aabr1 = new AABR();
+        Rigidbody rb = new Rigidbody(new Vector2f(5, 5), 0);
+        AABR aabr2 = new AABR(new Vector2f(0, 0), new Vector2f(10, 10), rb);
+        boolean result = IntersectionDetector.doesAABRIntersectAABR(aabr1, aabr2);
+        assertTrue(result);
+    }
+
+    @Test
+    public void separateAABRsShouldReturnFalseTest() {
+        AABR aabr1 = new AABR();
+        Rigidbody rb = new Rigidbody(new Vector2f(50, 50), 0);
+        AABR aabr2 = new AABR(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        boolean result = IntersectionDetector.doesAABRIntersectAABR(aabr1, aabr2);
+        assertFalse(result);
+    }
+
+    @Test
+    public void touchingAABRsShouldReturnTrueTest() {
+        AABR aabr1 = new AABR();
+        Vector2f max = aabr1.getMax();
+        Rigidbody rb = new Rigidbody(new Vector2f(max.x + 5, 0), 0);
+        AABR aabr2 = new AABR(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        boolean result = IntersectionDetector.doesAABRIntersectAABR(aabr1, aabr2);
+        assertTrue(result);
+    }
+
+    @Test
+    public void containedAABRShouldReturnTrueTest() {
+        Rigidbody rb1 = new Rigidbody(new Vector2f(0, 0), 0);
+        AABR aabr1 = new AABR(new Vector2f(-20, -20), new Vector2f(20, 20), rb1);
+        Rigidbody rb2 = new Rigidbody(new Vector2f(0, 0), 0);
+        AABR aabr2 = new AABR(new Vector2f(-5, -5), new Vector2f(5, 5), rb2);
+        boolean result = IntersectionDetector.doesAABRIntersectAABR(aabr1, aabr2);
+        assertTrue(result);
+    }
+
 
     // |--- doesAABRIntersectRectangle ---|
 
+    @Test
+    public void overlappingAABRAndRectangleShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        boolean result = IntersectionDetector.doesAABRIntersectRectangle(aabr, rectangle);
+        assertTrue(result);
+    }
+
+    @Test
+    public void separateAABRAndRectangleShouldReturnFalseTest() {
+        AABR aabr = new AABR();
+        Rigidbody rb = new Rigidbody(new Vector2f(50, 50), 0);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        boolean result = IntersectionDetector.doesAABRIntersectRectangle(aabr, rectangle);
+        assertFalse(result);
+    }
+
+    @Test
+    public void overlappingAABRAndRotatedRectangleShouldReturnTrueTest() {
+        AABR aabr = new AABR();
+        Rigidbody rb = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb);
+        boolean result = IntersectionDetector.doesAABRIntersectRectangle(aabr, rectangle);
+        assertTrue(result);
+    }
+
+
     // |--- doesRectangleIntersectRectangle ---|
+    // Note: This method is not yet implemented in IntersectionDetector (returns false always)
+    // Tests are commented out until implementation is complete
+
+    /*
+    @Test
+    public void overlappingRectanglesShouldReturnTrueTest() {
+        Rigidbody rb1 = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle1 = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb1);
+        Rigidbody rb2 = new Rigidbody(new Vector2f(5, 5), 0);
+        Rectangle rectangle2 = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb2);
+        boolean result = IntersectionDetector.doesRectangleIntersectRectangle(rectangle1, rectangle2);
+        assertTrue(result);
+    }
+
+    @Test
+    public void separateRectanglesShouldReturnFalseTest() {
+        Rigidbody rb1 = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle1 = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb1);
+        Rigidbody rb2 = new Rigidbody(new Vector2f(50, 50), 0);
+        Rectangle rectangle2 = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb2);
+        boolean result = IntersectionDetector.doesRectangleIntersectRectangle(rectangle1, rectangle2);
+        assertFalse(result);
+    }
+
+    @Test
+    public void overlappingRotatedRectanglesShouldReturnTrueTest() {
+        Rigidbody rb1 = new Rigidbody(new Vector2f(0, 0), 0);
+        Rectangle rectangle1 = new Rectangle(new Vector2f(-10, -10), new Vector2f(10, 10), rb1);
+        Rigidbody rb2 = new Rigidbody(new Vector2f(0, 0), 45);
+        Rectangle rectangle2 = new Rectangle(new Vector2f(-5, -5), new Vector2f(5, 5), rb2);
+        boolean result = IntersectionDetector.doesRectangleIntersectRectangle(rectangle1, rectangle2);
+        assertTrue(result);
+    }
+    */
 }

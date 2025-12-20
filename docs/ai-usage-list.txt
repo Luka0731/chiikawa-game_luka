@@ -1,0 +1,23 @@
+|---------  AI Usage List  ---------|
+I want to be very honest about the topic of AI. I do not like using AI. This is a fun project for me and i want to lern
+how to code a engine. Some tasks tho are tedious and require allot concentration. I stopped working on this project
+because of that. That's why I have decided to as little as possible use a bit of AI to get over these obstacles. This
+tho goes against my own morals and i am not proud of it. To make it a bit better tho, I want to honestly document all
+the cases that i have used AI for in this project.
+
+
+Prompt 1
+-----------------------------------------------------------------------------------------------------------------------
+Wich AI
+* Claude Code
+What and Why?
+*
+Prompt
+*
+Result
+*
+File/Code Lines
+*
+Code checked by human?
+*
+-----------------------------------------------------------------------------------------------------------------------

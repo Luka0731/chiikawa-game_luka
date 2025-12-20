@@ -66,7 +66,7 @@ public class IntersectionDetector {
         if (t < 0.0f || t > 1.0f) return false;
 
         // finde the closest point to the line segment
-        Vector2f closesPoint = new Vector2f(line.getToPosition()).add(ab.mul(t));
+        Vector2f closesPoint = new Vector2f(line.getFromPosition()).add(ab.mul(t));
 
         return isPointInCircle(closesPoint, circle);
     }
@@ -78,8 +78,8 @@ public class IntersectionDetector {
 
         Vector2f unitVector = new Vector2f(line.getToPosition()).sub(line.getFromPosition());
         unitVector.normalize();
-        unitVector.x = unitVector.x != 0 ? 1.0f / unitVector.x : 0.0f;
-        unitVector.y = unitVector.y != 0 ? 1.0f / unitVector.y : 0.0f;
+        unitVector.x = unitVector.x != 0 ? 1.0f / unitVector.x : Float.MAX_VALUE;
+        unitVector.y = unitVector.y != 0 ? 1.0f / unitVector.y : Float.MAX_VALUE;
 
         Vector2f min = aabr.getMin();
         min.sub(line.getFromPosition()).mul(unitVector);
@@ -148,10 +148,10 @@ public class IntersectionDetector {
     public static boolean raycast(AABR aabr, Ray ray, RaycastResult result) {
         RaycastResult.reset(result);
 
-        Vector2f unitVector = ray.getDirection();
+        Vector2f unitVector = new Vector2f(ray.getDirection());
         unitVector.normalize();
-        unitVector.x = unitVector.x != 0 ? 1.0f / unitVector.x : 0.0f;
-        unitVector.y = unitVector.y != 0 ? 1.0f / unitVector.y : 0.0f;
+        unitVector.x = unitVector.x != 0 ? 1.0f / unitVector.x : Float.MAX_VALUE;
+        unitVector.y = unitVector.y != 0 ? 1.0f / unitVector.y : Float.MAX_VALUE;
 
         Vector2f min = aabr.getMin();
         min.sub(ray.getOrigin()).mul(unitVector);
@@ -187,7 +187,7 @@ public class IntersectionDetector {
         CJSMath.rotate(xAxis, rectangle.getRigidbody().getRotation(), new Vector2f(0, 0));
         CJSMath.rotate(yAxis, rectangle.getRigidbody().getRotation(), new Vector2f(0, 0));
 
-        Vector2f p = new Vector2f(rectangle.getRigidbody().getPosition().sub(ray.getOrigin()));
+        Vector2f p = new Vector2f(rectangle.getRigidbody().getPosition()).sub(ray.getOrigin());
         Vector2f f = new Vector2f(xAxis.dot(ray.getDirection()), yAxis.dot(ray.getDirection()));
 
         // next, project p onto every axis of the box
@@ -211,7 +211,7 @@ public class IntersectionDetector {
         boolean hasHit = t > 0f; // && t * t < ray.getMaxLength(); todo: implement a max in ray
         if (!hasHit) return hasHit;
         if (result != null) {
-            Vector2f point = new Vector2f(ray.getOrigin()).add(new Vector2f(ray.getDirection().mul(t)));
+            Vector2f point = new Vector2f(ray.getOrigin()).add(new Vector2f(ray.getDirection()).mul(t));
             Vector2f normal = new Vector2f(ray.getOrigin()).sub(point);
             normal.normalize(); // todo: there is a more efficient way, then always having to normalize it
             result.init(point, normal, t, true);
@@ -266,7 +266,7 @@ public class IntersectionDetector {
         CJSMath.rotate(r, -rectangle.getRigidbody().getRotation(), new Vector2f(0, 0));
         Vector2f localCirclePos = new Vector2f(r).add(rectangle.getHalfSize());
 
-        Vector2f closestPointToCircle = new Vector2f(circle.getCenter());
+        Vector2f closestPointToCircle = new Vector2f(localCirclePos);
         if (closestPointToCircle.x < min.x) {
             closestPointToCircle.x = min.x;
         } else if (closestPointToCircle.x > max.x) {
@@ -292,7 +292,7 @@ public class IntersectionDetector {
         return doesCircleIntersectAABR(circle, aabr);
     }
 
-    public static boolean doseAABRIntersectAABR(AABR aabr1,  AABR aabr2) {
+    public static boolean doesAABRIntersectAABR(AABR aabr1, AABR aabr2) {
         Vector2f[] axisToTest = {new Vector2f(0, 1), new Vector2f(1, 0)};
         for (int i = 0; i < axisToTest.length; i++) {
             if (!doesAxisOverlap(aabr1, aabr2, axisToTest[i])) {

@@ -9,8 +9,8 @@ public class Rectangle {
     private Rigidbody rigidbody;
 
     public Rectangle() {
-        size = new Vector2f(-1.0f, 1.0f);
-        halfSize = new Vector2f(20);
+        this.halfSize = new Vector2f(20).div(2.0f);
+        size = new Vector2f(halfSize);
         rigidbody = new Rigidbody();
     }
 
