@@ -6,18 +6,28 @@ tho goes against my own morals and i am not proud of it. To make it a bit better
 the cases that i have used AI for in this project.
 
 
-Prompt 1
+Session 1
 -----------------------------------------------------------------------------------------------------------------------
 Wich AI
 * Claude Code
 What and Why?
-*
+* It has been a long time since i worked on this projec. To make the other tests allways filled me with dread, but i
+  wannted to start working again. I let it do the tests for the physics intersections.
 Prompt
-*
+* Hello Claude, im doing a game engine in java. And i need your help do do me some tests. I also started doing a 2d
+  phisics engine and for that i made some tests. specificly in the file IntersectionDetectorTests.java. Here i allready
+  made a structior with comments and did some few tests. Can you wright the others pls. This howl thing is still work
+  in pogress so maby not everything is possible. You have the permission to edit IntersectionDetectorTests.java but no
+  other files. Pls thoo tell me if you have feed back, like having more constructors in the primitves as an example.
+  Also maby some stuff is buggy or i did a logic mistake. If so, just tell me, dont fix it.
+* Another prompt, where i asked for more tests and gave it the file of the original creators
+  IntersectionDetectorTests.java file and i tolled it to cover the same edgecase.
 Result
-*
+* It made me 55 + 6 new Tests.
+* I also gave me the bugs that i had. I have then looked over them manualy and fixed these bugs myself
 File/Code Lines
-*
+* IntersectionDetectorTests.java -> ~line 115-770
 Code checked by human?
-*
+* I infact didnt check all the new tests. I was to lazy, but i checked like 10 of them + all of the tests, that didnt
+  work. The bug fixes where suggested by Ai but i fixed these myself without ai
 -----------------------------------------------------------------------------------------------------------------------
