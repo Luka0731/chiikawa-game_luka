@@ -56,6 +56,16 @@ public class Texture {
         stbi_image_free(image); // free the memory (or memory leak happens)
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (!(o instanceof Texture)) return false;
+        Texture oTex = (Texture)o;
+        return oTex.getWidth() == this.width && oTex.getHeight() == this.height &&
+                oTex.getId() == this.id &&
+                oTex.getTextureFilePath().equals(this.textureFilePath);
+    }
+
 
     // |--- getters & setters ---|
 
@@ -77,5 +87,9 @@ public class Texture {
 
     public int getId() {
         return id;
+    }
+
+    public String getTextureFilePath() {
+        return textureFilePath;
     }
 }
