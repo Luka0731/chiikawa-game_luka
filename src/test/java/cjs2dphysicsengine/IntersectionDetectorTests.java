@@ -739,10 +739,7 @@ public class IntersectionDetectorTests {
 
 
     // |--- doesRectangleIntersectRectangle ---|
-    // Note: This method is not yet implemented in IntersectionDetector (returns false always)
-    // Tests are commented out until implementation is complete
 
-    /*
     @Test
     public void overlappingRectanglesShouldReturnTrueTest() {
         Rigidbody rb1 = new Rigidbody(new Vector2f(0, 0), 0);
@@ -772,5 +769,4 @@ public class IntersectionDetectorTests {
         boolean result = IntersectionDetector.doesRectangleIntersectRectangle(rectangle1, rectangle2);
         assertTrue(result);
     }
-    */
 }

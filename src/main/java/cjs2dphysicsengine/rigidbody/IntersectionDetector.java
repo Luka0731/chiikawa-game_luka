@@ -333,8 +333,32 @@ public class IntersectionDetector {
     }
 
     public static boolean doesRectangleIntersectRectangle (Rectangle rectangle1, Rectangle rectangle2) {
-        // todo
-        return false;
+        // create the axes to test
+        Vector2f[] axesToTest = {
+                new Vector2f(1, 0),
+                new Vector2f(0, 1),
+                new Vector2f(1, 0),
+                new Vector2f(0, 1)
+        };
+
+        // rotate the first two axes by rectangle1's rotation, this transforms them from world axes to rectangle1's local axes
+        float rotationOfRectangle1 = rectangle1.getRigidbody().getRotation();
+        CJSMath.rotate(axesToTest[0], rotationOfRectangle1, new Vector2f(0, 0));
+        CJSMath.rotate(axesToTest[1], rotationOfRectangle1, new Vector2f(0, 0));
+        // same like bevor, but Rotate the last two axes by rectangle2's rotation
+        float rotationOfRectangle2 = rectangle2.getRigidbody().getRotation();
+        CJSMath.rotate(axesToTest[2], rotationOfRectangle2, new Vector2f(0, 0));
+        CJSMath.rotate(axesToTest[3], rotationOfRectangle2, new Vector2f(0, 0));
+
+        // for each axis, we project both rectangles onto it and check if the projections (intervals) overlap.
+        for (int i = 0; i < axesToTest.length; i++) {
+            Vector2f currentAxis = axesToTest[i];
+            boolean axisHasOverlap = doesAxisOverlap(rectangle1, rectangle2, currentAxis);
+            if (!axisHasOverlap) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
