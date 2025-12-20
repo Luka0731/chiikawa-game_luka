@@ -4,11 +4,12 @@ import cjs2dphysicsengine.primitives.*;
 import util.CJSMath;
 import org.joml.Vector2f;
 
-// todo: don't use comparison for floating point number (use compare method from CJSMath)
+import static util.CJSMath.compare;
+
 // todo: as improvement, i could make some private methods, cause multiple methods use similar code
 // todo: look at every acuation again, cause i dont understand everything
 public class IntersectionDetector {
-    private final float EPSILON = 0.000001f; // higher epsilon for comparisons with square root numbers
+    private static final float EPSILON = 0.000001f; // higher epsilon for comparisons with square root numbers
 
 
     // |--- point vs primitive tests ---|
@@ -17,11 +18,11 @@ public class IntersectionDetector {
         float dy = line.getToPosition().y - line.getFromPosition().y;
         float dx = line.getToPosition().x - line.getFromPosition().x;
 
-        if (CJSMath.compare(dx, 0f)) return CJSMath.compare(point.x, line.getFromPosition().x);
+        if (compare(dx, 0f)) return compare(point.x, line.getFromPosition().x);
 
         float slob = dy / dx;
         float yIntersect = line.getToPosition().y - (slob * line.getToPosition().x);
-        return CJSMath.compare(point.y, slob * point.x + yIntersect);
+        return compare(point.y, slob * point.x + yIntersect);
     }
 
     public static boolean isPointInCircle(Vector2f point, Circle circle) {
@@ -63,7 +64,7 @@ public class IntersectionDetector {
         Vector2f centerToLineFromPosition = new Vector2f(circleCenter).sub(line.getFromPosition());
         float t = centerToLineFromPosition.dot(ab) / ab.dot(ab);
 
-        if (t < 0.0f || t > 1.0f) return false;
+        if (t < EPSILON || t > 1.0f) return false;
 
         // finde the closest point to the line segment
         Vector2f closesPoint = new Vector2f(line.getFromPosition()).add(ab.mul(t));
@@ -78,8 +79,8 @@ public class IntersectionDetector {
 
         Vector2f unitVector = new Vector2f(line.getToPosition()).sub(line.getFromPosition());
         unitVector.normalize();
-        unitVector.x = unitVector.x != 0 ? 1.0f / unitVector.x : Float.MAX_VALUE;
-        unitVector.y = unitVector.y != 0 ? 1.0f / unitVector.y : Float.MAX_VALUE;
+        unitVector.x = !compare(unitVector.x, 0f) ? 1.0f / unitVector.x : Float.MAX_VALUE;
+        unitVector.y = !compare(unitVector.y, 0f) ? 1.0f / unitVector.y : Float.MAX_VALUE;
 
         Vector2f min = aabr.getMin();
         min.sub(line.getFromPosition()).mul(unitVector);
@@ -88,7 +89,7 @@ public class IntersectionDetector {
 
         float tMin = Math.max(Math.min(min.x, max.x), Math.min(min.y, max.y));
         float tMax = Math.min(Math.max(min.x, max.x), Math.max(min.y, max.y));
-        if (tMax < 0 || tMin > tMax) return false;
+        if (tMax < -EPSILON || tMin > tMax) return false;
         float t = tMin < 0f ? tMax : tMin;
         return t > 0f && t * t < line.getLengthSquared();
     }
@@ -120,7 +121,7 @@ public class IntersectionDetector {
         // project the vector from the ray origin onto the direction of the ray
         float a = originToCircle.dot(ray.getDirection());
         float bSquared = originToCircleLengthSquared - a * a;
-        if (radiusSquared - bSquared < 0.0f) return false;
+        if (radiusSquared - bSquared < -EPSILON) return false;
 
         float f = (float)Math.sqrt(radiusSquared - bSquared); // this is why raycasts are expensive
         float t = 0;
@@ -131,7 +132,7 @@ public class IntersectionDetector {
             t = a- f;
         }
 
-        if (t < 0) return false;
+        if (t < -EPSILON) return false;
         if (result != null) {
             Vector2f point = new Vector2f(ray.getOrigin()).add(new Vector2f(ray.getDirection().mul(t)));
             Vector2f normal = new Vector2f(point).sub(circle.getCenter());
@@ -150,8 +151,8 @@ public class IntersectionDetector {
 
         Vector2f unitVector = new Vector2f(ray.getDirection());
         unitVector.normalize();
-        unitVector.x = unitVector.x != 0 ? 1.0f / unitVector.x : Float.MAX_VALUE;
-        unitVector.y = unitVector.y != 0 ? 1.0f / unitVector.y : Float.MAX_VALUE;
+        unitVector.x = !compare(unitVector.x, 0f) ? 1.0f / unitVector.x : Float.MAX_VALUE;
+        unitVector.y = !compare(unitVector.y, 0f) ? 1.0f / unitVector.y : Float.MAX_VALUE;
 
         Vector2f min = aabr.getMin();
         min.sub(ray.getOrigin()).mul(unitVector);
@@ -160,10 +161,10 @@ public class IntersectionDetector {
 
         float tMin = Math.max(Math.min(min.x, max.x), Math.min(min.y, max.y));
         float tMax = Math.min(Math.max(min.x, max.x), Math.max(min.y, max.y));
-        if (tMax < 0 || tMin > tMax) return false;
+        if (tMax < -EPSILON || tMin > tMax) return false;
 
-        float t = tMin < 0f ? tMax : tMin;
-        boolean hasHit = t > 0f; // && t * t < ray.getMaxLength(); todo: implement a max in ray
+        float t = tMin < -EPSILON ? tMax : tMin;
+        boolean hasHit = t > EPSILON; // && t * t < ray.getMaxLength(); todo: implement a max in ray
         if (!hasHit) return hasHit;
         if (result != null) {
             Vector2f point = new Vector2f(ray.getOrigin()).add(new Vector2f(ray.getDirection().mul(t)));
@@ -195,10 +196,10 @@ public class IntersectionDetector {
 
         float[] tArray = {0, 0, 0, 0};
         for (int i = 0; i < 2; i++) {
-            if (CJSMath.compare(f.get(i), 0)) {
+            if (compare(f.get(i), 0f)) {
                 // if the ray is parallel to the current axis, and the origin of the ray is not inside, we have ho hit
-                if(-e.get(i) - halfSize.get(i) > 0 || -e.get(i) + halfSize.get(i) < 0) return false;
-                f.setComponent(i, 0.000001f);
+                if(-e.get(i) - halfSize.get(i) > EPSILON || -e.get(i) + halfSize.get(i) < -EPSILON) return false;
+                f.setComponent(i, EPSILON);
             }
             tArray[i * 2] = (e.get(i) + halfSize.get(i)) / f.get(i);     // tMax for this axis
             tArray[i * 2 + 1] = (e.get(i) - halfSize.get(i)) / f.get(i); // tMin for this axis
@@ -207,8 +208,8 @@ public class IntersectionDetector {
         float tMin = Math.max(Math.min(tArray[0], tArray[1]), Math.min(tArray[2], tArray[3]));
         float tMax = Math.min(Math.max(tArray[0], tArray[1]), Math.max(tArray[2], tArray[3]));
 
-        float t = tMin < 0f ? tMax : tMin;
-        boolean hasHit = t > 0f; // && t * t < ray.getMaxLength(); todo: implement a max in ray
+        float t = tMin < -EPSILON ? tMax : tMin;
+        boolean hasHit = t > EPSILON; // && t * t < ray.getMaxLength(); todo: implement a max in ray
         if (!hasHit) return hasHit;
         if (result != null) {
             Vector2f point = new Vector2f(ray.getOrigin()).add(new Vector2f(ray.getDirection()).mul(t));
