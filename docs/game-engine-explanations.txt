@@ -84,7 +84,10 @@ acts as a boolean variable indicating a condition to be either true or false
 -
 
 |--- framebuffers  ---|
--
+So what normally happens in this game engine, is that there is the game (sprites, physics, objects, etc.) and it
+directly draws it to the screen. But what you can also do is save that whole game in a texture(called a framebuffer)
+and only then draw it to the screen. The advantages of this framebuffer method is, that you can ofc put a cool filter
+over the texture. You can also adjust the size, making it maybe only a forth of the screen size.
 
 |--- rbo  ---|
 RBO is another Framebuffer Object from OpenGl, like VBO and VAO. It stands for Render Buffer Object. Simply explained

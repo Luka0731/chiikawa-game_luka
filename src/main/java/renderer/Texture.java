@@ -14,6 +14,23 @@ public class Texture {
     private int id;
     private int width, height;
 
+    public Texture() {
+        id = -1;
+        width = -1;
+        height = -1;
+    }
+
+    public Texture(int width, int height) {
+        this.textureFilePath = "Generated";
+
+        // generate texture on GPU
+        id = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, id);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+                0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    }
+
     public void init(String textureFilePath) {
         this.textureFilePath = textureFilePath;
 

@@ -8,6 +8,7 @@ This file contains all the things that still have toPosition be improved or done
 * physics engine: angular momentum
 * research: collision detection and resolution
 * do unit/integration/component tests for the physics engine
+* do a whole documentation on what all this engien can at the end of this
 
 |--- improvements ---|
 * Incript save file

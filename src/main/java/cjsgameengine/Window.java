@@ -1,6 +1,7 @@
 package cjsgameengine;
 
 import renderer.DebugDraw;
+import renderer.Framebuffer;
 import scenes.RoomEditorScene;
 import scenes.RoomScene;
 import scenes.Scene;
@@ -21,6 +22,7 @@ public class Window {
     private long glfwWindow; // the memory space location of the window (pointer)
     private ImGuiLayer imGuiLayer;
     private static Scene currentScene = null;
+    private Framebuffer framebuffer; // testing
 
     private Window() {
         this.width = 1920;
@@ -92,6 +94,8 @@ public class Window {
         this.imGuiLayer = new ImGuiLayer(glfwWindow);
         this.imGuiLayer.initImGui();
 
+        this.framebuffer = new Framebuffer(3840, 2160);
+
         Window.changeScene(0); // starting scene
     }
 
@@ -109,10 +113,12 @@ public class Window {
             glClearColor(1, 1, 1, 1); // makes a white background color
             glClear(GL_COLOR_BUFFER_BIT); // clears the color with the color that was made one line up
 
+            this.framebuffer.bind();
             if(dt >= 0) {
                 DebugDraw.draw();
                 currentScene.update(dt);
             }
+            this.framebuffer.unbind();
 
             this.imGuiLayer.update(dt, currentScene);
             glfwSwapBuffers(glfwWindow); // swaps the front and back buffer (frame update)
