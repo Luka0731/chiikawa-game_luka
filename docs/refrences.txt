@@ -27,6 +27,10 @@ and be honest on how heavy my project is inspired on these
   2D Game Physics Engine
   -> -
 
+* ImGui GitHub Repo
+  https://github.com/ocornut/imgui
+  -> -
+
 
 
 |--- Further References ---|
