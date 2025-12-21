@@ -1,8 +1,8 @@
 package scenes;
 
-public class RoomScene extends Scene {
+public class LevelScene extends Scene {
 
-    public RoomScene() {}
+    public LevelScene() {}
 
     @Override
     public void init() {}

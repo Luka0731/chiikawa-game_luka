@@ -2,8 +2,8 @@ package cjsgameengine;
 
 import renderer.DebugDraw;
 import renderer.Framebuffer;
-import scenes.RoomEditorScene;
-import scenes.RoomScene;
+import scenes.LevelEditorScene;
+import scenes.LevelScene;
 import scenes.Scene;
 import util.Settings;
 import org.lwjgl.Version;
@@ -113,7 +113,7 @@ public class Window {
             glClearColor(1, 1, 1, 1); // makes a white background color
             glClear(GL_COLOR_BUFFER_BIT); // clears the color with the color that was made one line up
 
-            this.framebuffer.bind();
+            //this.framebuffer.bind();
             if(dt >= 0) {
                 DebugDraw.draw();
                 currentScene.update(dt);
@@ -134,10 +134,10 @@ public class Window {
     public static void changeScene(int newScene) {
         switch (newScene) {
             case 0:
-                currentScene = new RoomEditorScene();
+                currentScene = new LevelEditorScene();
                 break;
             case 1:
-                currentScene = new RoomScene();
+                currentScene = new LevelScene();
                 break;
             default:
                 assert false : "Unknown scene '" + newScene + "'.";

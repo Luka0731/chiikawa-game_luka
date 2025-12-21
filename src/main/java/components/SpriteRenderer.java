@@ -46,6 +46,10 @@ public class SpriteRenderer extends Component {
         return sprite.getTexture();
     }
 
+    public void setTexture(Texture texture) {
+        this.sprite.setTexture(texture);
+    }
+
     public Vector2f[] getTextureCoords() {
         return sprite.getTextureCoords();
     }

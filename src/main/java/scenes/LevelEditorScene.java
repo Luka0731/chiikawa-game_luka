@@ -11,7 +11,7 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
 
-public class RoomEditorScene extends Scene {
+public class LevelEditorScene extends Scene {
     private Spritesheet sprites;
     private GameObject levelEditorStuff = new GameObject("LevelEditorStuff",
             new Transform(new Vector2f()), 0); // todo: make it not declare in the attribute
@@ -26,7 +26,9 @@ public class RoomEditorScene extends Scene {
         this.camera = new Camera(new Vector2f(-250, -50));
         sprites = AssetPool.getSpritesheet("assets/images/decorationsAndBlocks.png");
         if (isLevelLoaded) {
-            // this.activeGameObject = gameObjects.get(0); // testing
+            if (gameObjects.size() > 0) {
+                this.activeGameObject = gameObjects.get(0); // testing
+            }
             return;
         }
 
@@ -58,6 +60,15 @@ public class RoomEditorScene extends Scene {
         AssetPool.addSpritesheet("assets/images/decorationsAndBlocks.png",
                 new Spritesheet(AssetPool.addOrGetTexture("assets/images/decorationsAndBlocks.png"),
                         16, 16, 81, 0));
+
+        for (GameObject gameObject : gameObjects) {
+            if (gameObject.getComponent(SpriteRenderer.class) != null) {
+                SpriteRenderer spriteRenderer = gameObject.getComponent(SpriteRenderer.class);
+                if (spriteRenderer.getTexture() != null) {
+                    spriteRenderer.setTexture(AssetPool.addOrGetTexture(spriteRenderer.getTexture().getTextureFilePath()));
+                }
+            }
+        }
     }
 
     @Override
