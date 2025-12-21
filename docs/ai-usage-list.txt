@@ -45,11 +45,18 @@ What and Why?
   to understand things, and in my past I didn't have that oportunity.
 * It has been some time, since i last worked o this project, so I wanted a refresher on terms and technologies.
 Prompt
-*
+* Can you do me a favor and look at my game-engine-explanations.txt file. Here i have some explenations about
+  everything i learned this far. Can you give me a feed back on if its right?
+* Okay can you do me a nother big favor. I now totally get this part of the gameengine i coded, but now i wonder how
+  other classes work in ths. Specificly Renderer and DebugDraw. I know it works these two classes work with DebugDraw,
+  Framebuffer, RenderBatch, Shader together. Please explain there corrilation together. Also explain me other relations
+  to classes like Window and Scene as example. I am curiouse (:
 Result
-*
+* I got good explenations, that i also searched up to check the validety, if it was about terms and not specificly
+  examples of my code base.
 File/Code Lines
-*
+* game-engine-explnations -> ~line 75-95
+* rendering-system.txt -> the whole file (but ofc i have wrighten the text myself)
 Code checked by human?
 * I read everything the AI explained me through and without looking at it, I explained it myseld in the explanation
   file. Only the diagram that the AI generated, I copyed in, cause visual stuff really helps me to understand things.
