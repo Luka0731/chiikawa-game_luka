@@ -23,6 +23,10 @@ and be honest on how heavy my project is inspired on these
   -> My whole game engine is based on unity and is pretty similar. Tho I have to say I don't support it because of its
      recent policies and how this Program gets managed. (Its giving EA)
 
+* Box2D
+  2D Game Physics Engine
+  -> -
+
 
 
 |--- Further References ---|

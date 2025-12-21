@@ -136,3 +136,6 @@ sample from it. In this project, it stores depth information for the framebuffer
 
 |--- rendering systems ---|
 I made a file called "rendering-systems.txt" where i explain things there.
+
+|--- delta time (dt) ---|
+-

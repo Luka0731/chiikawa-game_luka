@@ -8,6 +8,13 @@ public class Rigidbody extends Component {
     private Vector2f position;
     private float rotation; // in degrees  // todo: more efficient ways then degrease
 
+    private Vector2f linearVelocity = new Vector2f();
+    private float angularVelocity = 0.0f;
+    private float linearDamping = 0.0f;
+    private float angularDamping = 0.0f;
+
+    private boolean fixedRotation = false;
+
     public Rigidbody() {
         position = new Vector2f();
         rotation = 0;
@@ -25,15 +32,16 @@ public class Rigidbody extends Component {
         return position;
     }
 
-    public void setPosition(Vector2f position) {
-        this.position = position;
-    }
-
     public float getRotation() {
         return rotation;
     }
 
-    public void setRotation(float rotation) {
+    public void setTransform(Vector2f position, float rotation) {
+        this.position.set(position);
         this.rotation = rotation;
+    }
+
+    public void setTransform(Vector2f position) {
+        this.position.set(position);
     }
 }

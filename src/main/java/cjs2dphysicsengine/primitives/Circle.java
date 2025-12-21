@@ -23,7 +23,23 @@ public class Circle {
         return radius;
     }
 
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
     public Vector2f getCenter() {
         return rigidbody.getPosition();
+    }
+
+    public void setCenter(Vector2f center) {
+        this.rigidbody.setTransform(center);
+    }
+
+    public Rigidbody getRigidbody() {
+        return rigidbody;
+    }
+
+    public void setRigidbody(Rigidbody rigidbody) {
+        this.rigidbody = rigidbody;
     }
 }
