@@ -30,7 +30,7 @@ public class Renderer {
         }
     }
 
-    // todo: make so batch renderer is not restrictet to one zIndex
+    // todo: make so batch renderer is not restricted to one zIndex
     private void add(SpriteRenderer spriteRenderer) {
         boolean added = false;
         for (RenderBatch batch : batches) {

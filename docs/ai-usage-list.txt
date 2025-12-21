@@ -6,7 +6,7 @@ tho goes against my own morals and i am not proud of it. To make it a bit better
 the cases that i have used AI for in this project.
 
 
-Session 1
+Session 1 *** 20.12.2025
 -----------------------------------------------------------------------------------------------------------------------
 Wich AI
 * Claude Code
@@ -14,7 +14,7 @@ What and Why?
 * It has been a long time since i worked on this projec. To make the other tests allways filled me with dread, but i
   wannted to start working again. I let it do the tests for the physics intersections.
 Prompt
-* Hello Claude, im doing a game engine in java. And i need your help do do me some tests. I also started doing a 2d
+* Hello Claude, im doing a game engine in java. And i need your help do me some tests. I also started doing a 2d
   phisics engine and for that i made some tests. specificly in the file IntersectionDetectorTests.java. Here i allready
   made a structior with comments and did some few tests. Can you wright the others pls. This howl thing is still work
   in pogress so maby not everything is possible. You have the permission to edit IntersectionDetectorTests.java but no
@@ -30,4 +30,27 @@ File/Code Lines
 Code checked by human?
 * I infact didnt check all the new tests. I was to lazy, but i checked like 10 of them + all of the tests, that didnt
   work. The bug fixes where suggested by Ai but i fixed these myself without ai
+-----------------------------------------------------------------------------------------------------------------------
+
+
+
+Session 2 *** 21.12.2025
+-----------------------------------------------------------------------------------------------------------------------
+Wich AI
+* Claude Code
+What and Why?
+* I have had some consepts, that I have never quiet understood about my engine. Allot i understand, but some stuff i
+  quiet never did. In my game-engine-explanations.txt I still had some open explanation gaps and i let it explain the
+  AI explain that for me. Claude Code having my whole code base, i tolled it to give me examples. Examples help me most
+  to understand things, and in my past I didn't have that oportunity.
+* It has been some time, since i last worked o this project, so I wanted a refresher on terms and technologies.
+Prompt
+*
+Result
+*
+File/Code Lines
+*
+Code checked by human?
+* I read everything the AI explained me through and without looking at it, I explained it myseld in the explanation
+  file. Only the diagram that the AI generated, I copyed in, cause visual stuff really helps me to understand things.
 -----------------------------------------------------------------------------------------------------------------------

@@ -15,13 +15,12 @@ happens. This website shows GLFW Callbacks that can be used: https://www.glfw.or
 mods in the listener classes are just additional key/buttons that are pressed with other buttons.
 
 |--- graphics programming ---|
-Huge thema that is explained in a quick overview in these videos:
+-*- Huge thema that is explained in a quick overview in these videos:
 * Video 1: https://youtu.be/TAXEND6xSYU?si=rkY3fTCWmBewXpcA
 * Video 2: https://youtu.be/WMiggUPst-Q?si=KilWM0hl_Ka1goLg
 * Book of Shaders: https://thebookofshaders.com/
 * Hello Triangle OpenGL: https://learnopengl.com/Getting-started/Hello-Triangle
-
-Some important technical terms to graphics programming:
+-*- Some important technical terms to graphics programming:
 * Raster Graphics
 * Blit
 * Graphics Pipeline
@@ -48,13 +47,13 @@ preparing a window, loading assets, or setting variables. The use of it is, to k
 |--- game camera ---|
 Here I explain some concepts to stuff that has to do with the game camera.
 Here is also a link to an explaining video: https://youtu.be/r857cbEtEY8?si=EJUJfEhj5aEedSGE
--- perspective and orthographic projections
+-*- perspective and orthographic projections
 * Perspective Projection: Objects farther away appear smaller. It creates a realistic 3D effect.
 * Orthographic Projection: Objects keep the same size regardless of distance. There is no perspective distortion and is
   often used in 2D or isometric games.
--- clipping plate
+-*- clipping plate
 Defines near and far limits of camera view; anything outside gets clipped (not rendered).
--- other important but not explained important technical:
+-*- other important but not explained terms:
 * matrix
 * SIMD operations
 * view matrix / LookAt
@@ -65,23 +64,66 @@ Defines near and far limits of camera view; anything outside gets clipped (not r
 Explanation link: https://youtu.be/HkG8ZdhoXhs?si=fnx1pB3C0TICoXnb
 
 |--- batch rendering ---|
--
+Instead of sending 1000 draw calls for 1000 sprites, you combine them into ONE draw call with all the vertex data
+together. Much faster! Like mailing 1000 letters in one box instead of 1000 separate trips to the post office.
 
 |--- asset pool ---|
--
+A central storage that keeps loaded assets (textures, shaders) so you don't load the same file twice. If 50 enemies use
+the same texture, you load it once and share it throughout the game.
 
-|--- differences between sprite, spritesheet, texture, SpriteRenderer and other similar classes ---|
--
+|--- differences between sprite, spritesheet, texture, SpriteRenderer and other related classes ---|
+ ┌─────────────────────────────────────────────────────────────────────────────┐
+ │                              YOUR PROJECT                                   │
+ │                                                                             │
+ │  ┌─────────────┐      ┌─────────────┐      ┌──────────────────┐             │
+ │  │   Texture   │      │   Sprite    │      │  Spritesheet     │             │
+ │  │  (the raw   │◄─────│  (a piece   │◄─────│  (cuts texture   │             │
+ │  │   image)    │      │  of image)  │      │   into sprites)  │             │
+ │  └─────────────┘      └──────┬──────┘      └──────────────────┘             │
+ │                              │                                              │
+ │                              ▼                                              │
+ │                     ┌────────────────┐                                      │
+ │                     │ SpriteRenderer │                                      │
+ │                     │  (component    │                                      │
+ │                     │   that draws)  │                                      │
+ │                     └────────┬───────┘                                      │
+ │                              │                                              │
+ │                              ▼                                              │
+ │                     ┌────────────────┐      ┌──────────────────┐            │
+ │                     │   GameObject   │─────►│   RenderBatch    │            │
+ │                     │  (the entity)  │      │  (sends to GPU)  │            │
+ │                     └────────────────┘      └──────────────────┘            │
+ └─────────────────────────────────────────────────────────────────────────────┘
+* Texture -> The texture is pure data made for the GPU. It is very much on the OpenGL side and knows nothing about game
+             logic.
+* Sprite -> Sprite is like a window into the texture. It defines wich part of the texture is shown and how big it
+            should be.
+* Spritesheet -> Spritesheet is more of a helper class. It splits a texture into multiple sprites easily. Especially
+                 handy if u will do animations, cause they require allot of similar sprites.
+* SpriteRenderer -> SpriteRenderer is a component. Made, so that a object then can have visual existence. It has a
+                    sprite and other attributes, like tint color and other game logic.
+* RendereBatch -> It reads from the SpritRenderer and sends the data to the GPU. Also including batch rendering logic
+                  wich i explained a bit more at the top.
+Doing this whole system like this has many advantages. To count some of these as examples. First with separating
+textures and sprites, you can have a few textures, but allot of sprites that use different parts of these textures. In
+the end it saves allot of memory. Also it is more efficient because of systems like Batch Rendering and Dirty Flag
+Optimization. It is also a good split between responsibilities of the classes, making the code cleaner.
 
 |---  difference flag and boolean ---|
 Flag variable is used as a signal in programming to let the program know that a certain condition has met. It usually
 acts as a boolean variable indicating a condition to be either true or false
 
-|--- the graphical updating system ---|
--
-
 |--- traditional serialization and serialization with reflection ---|
--
+Serialization is when you turn objects into a savable format. In this engine we save the game in a file called
+level.txt as a json. It is not encrypted, but will be in the future. Deserialization is the opposite.
+-*- traditional serialization
+There you used to wright code on which attributes it should save and to name it -> "  json.put("name", this.name); "
+It is hard to maintain and makes a lot of boilerplate code.
+-*- serialization with reflection
+This is the modern way. Reflection basically means that it decides during runtime what attributes it will serialize. In
+this engine the library GSOn is used for this, that does that. U basically only have to implement a interface into the
+classes that you want to serialize/deserialize. I have also made TypeAdapter Classes for GameObject and Component, to
+handle polymorphic serialization for them.
 
 |--- framebuffers  ---|
 So what normally happens in this game engine, is that there is the game (sprites, physics, objects, etc.) and it
@@ -90,6 +132,9 @@ and only then draw it to the screen. The advantages of this framebuffer method i
 over the texture. You can also adjust the size, making it maybe only a forth of the screen size.
 
 |--- rbo  ---|
-RBO is another Framebuffer Object from OpenGl, like VBO and VAO. It stands for Render Buffer Object. Simply explained
-it is used to make the rendering process quicker. From a RBO data is only stored and wirghten and nothing more happens
-to it. It is used in this project for framebuffers.
+RBO (Render Buffer Object) is used when you need to store render data (like depth or stencil info) but don't need to
+read it back as a texture. It's faster than a texture because OpenGL can optimize it - you can only write to it, not
+sample from it. In this project, it stores depth information for the framebuffer.
+
+|--- rendering systems ---|
+I made a file called "rendering-systems.txt" where i explain things there.

@@ -1,0 +1,163 @@
+|---------  Rendering System  ---------|
+This here is a general explanation of the system that I have build (As of 21.12.2025 Commit aa90199) in my game engine.
+It doesn't only look at the rendering system, but also other classes that are important to it
+
+ ┌─────────────────────────────────────────────────────────────────────────────────┐
+ │                                    WINDOW                                       │
+ │                              (The Main Controller)                              │
+ │                                                                                 │
+ │   ┌─────────────────────────────────────────────────────────────────────────┐   │
+ │   │                           GAME LOOP (loop())                            │   │
+ │   │                                                                         │   │
+ │   │   1. glfwPollEvents()          ─── Input handling                       │   │
+ │   │   2. DebugDraw.beginFrame()    ─── Prepare debug lines                  │   │
+ │   │   3. framebuffer.bind()        ─── Render to texture                    │   │
+ │   │   4. DebugDraw.draw()          ─── Draw debug shapes                    │   │
+ │   │   5. currentScene.update(dt)   ─── Update & render game                 │   │
+ │   │   6. framebuffer.unbind()      ─── Done rendering to texture            │   │
+ │   │   7. imGuiLayer.update()       ─── Draw UI (shows framebuffer texture)  │   │
+ │   │   8. glfwSwapBuffers()         ─── Show frame on screen                 │   │
+ │   │                                                                         │   │
+ │   └─────────────────────────────────────────────────────────────────────────┘   │
+ │                                                                                 │
+ │   Owns: Framebuffer, ImGuiLayer, currentScene                                   │
+ └─────────────────────────────────────────────────────────────────────────────────┘
+
+There are two Separate Rendering Paths in the game engine that are independent form each other. They don't talk to each
+other. DebugDraw is called directly from Window.loop(), while the main rendering goes through Scene.update() → Renderer.render().
+
+-*- Path 1: Main Game Rendering
+  Scene ──owns──> Renderer ──owns──> RenderBatch[] ──uses──> Shader
+                                          │
+                                          └──draws──> SpriteRenderer[]
+
+-*- Path 2: Debug Rendering
+  DebugDraw (static) ──uses──> its own Shader
+        │
+        └──draws──> DebugDrawLine[]
+
+
+
+|--- Main Game Rendering from close up ---|
+
+  ┌──────────────────────────────────────────────────────────────────────────────┐
+  │  SCENE                                                                       │
+  │  ┌────────────────────────────────────────────────────────────────────────┐  │
+  │  │  - Has a Camera (projection + view matrices)                           │  │
+  │  │  - Has a list of GameObjects                                           │  │
+  │  │  - Has a Renderer                                                      │  │
+  │  │                                                                        │  │
+  │  │  start() {                                                             │  │
+  │  │      for each gameObject:                                              │  │
+  │  │          renderer.add(gameObject)  ◄── Registers sprites with batches  │  │
+  │  │  }                                                                     │  │
+  │  │                                                                        │  │
+  │  │  update(dt) {                                                          │  │
+  │  │      // game logic...                                                  │  │
+  │  │      renderer.render()  ◄── Triggers actual drawing                    │  │
+  │  │  }                                                                     │  │
+  │  └────────────────────────────────────────────────────────────────────────┘  │
+  └──────────────────────────────────────────────────────────────────────────────┘
+                                        │
+                                        ▼
+  ┌──────────────────────────────────────────────────────────────────────────────┐
+  │  RENDERER                                                                    │
+  │  ┌────────────────────────────────────────────────────────────────────────┐  │
+  │  │  - Manages a list of RenderBatches                                     │  │
+  │  │  - Groups sprites by zIndex and texture compatibility                  │  │
+  │  │                                                                        │  │
+  │  │  add(gameObject) {                                                     │  │
+  │  │      spriteRenderer = gameObject.getComponent(SpriteRenderer)          │  │
+  │  │      find batch with:                                                  │  │
+  │  │          - same zIndex                                                 │  │
+  │  │          - has room for more sprites                                   │  │
+  │  │          - has the texture or room for new texture                     │  │
+  │  │      if no batch found:                                                │  │
+  │  │          create new RenderBatch                                        │  │
+  │  │      batch.addSprite(spriteRenderer)                                   │  │
+  │  │  }                                                                     │  │
+  │  │                                                                        │  │
+  │  │  render() {                                                            │  │
+  │  │      for each batch:                                                   │  │
+  │  │          batch.render()  ◄── Each batch = 1 draw call!                 │  │
+  │  │  }                                                                     │  │
+  │  └────────────────────────────────────────────────────────────────────────┘  │
+  └──────────────────────────────────────────────────────────────────────────────┘
+                                        │
+                                        ▼
+  ┌──────────────────────────────────────────────────────────────────────────────┐
+  │  RENDER BATCH                                                                │
+  │  ┌────────────────────────────────────────────────────────────────────────┐  │
+  │  │  - Has OpenGL buffers: VAO, VBO, EBO                                   │  │
+  │  │  - Has a Shader (from AssetPool)                                       │  │
+  │  │  - Stores up to 1000 SpriteRenderers                                   │  │
+  │  │  - Stores up to 8 Textures                                             │  │
+  │  │                                                                        │  │
+  │  │  render() {                                                            │  │
+  │  │      1. Check if any sprite is dirty → rebuild vertex data             │  │
+  │  │      2. Upload vertex data to GPU (glBufferSubData)                    │  │
+  │  │      3. Use shader                                                     │  │
+  │  │      4. Upload camera matrices (uProjection, uView)                    │  │
+  │  │      5. Bind all textures to slots 0-7                                 │  │
+  │  │      6. glDrawElements() ◄── THE ACTUAL DRAW CALL                      │  │
+  │  │      7. Cleanup                                                        │  │
+  │  │  }                                                                     │  │
+  │  └────────────────────────────────────────────────────────────────────────┘  │
+  └──────────────────────────────────────────────────────────────────────────────┘
+
+
+|--- Complete Data Flow ---|
+
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │                              ONE FRAME                                      │
+  └─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+           ┌──────────────────────────┼──────────────────────────┐
+           │                          │                          │
+           ▼                          ▼                          ▼
+      ┌─────────┐              ┌────────────┐              ┌───────────┐
+      │DebugDraw│              │   Scene    │              │  ImGui    │
+      └────┬────┘              └─────┬──────┘              └───────────┘
+           │                         │
+           │                         ▼
+           │                   ┌──────────┐
+           │                   │ Renderer │
+           │                   └────┬─────┘
+           │                        │
+           │           ┌────────────┼────────────┐
+           │           ▼            ▼            ▼
+           │    ┌───────────┐ ┌───────────┐ ┌───────────┐
+           │    │RenderBatch│ │RenderBatch│ │RenderBatch│
+           │    │  zIndex=0 │ │  zIndex=1 │ │  zIndex=2 │
+           │    └─────┬─────┘ └─────┬─────┘ └─────┬─────┘
+           │          │             │             │
+           │          ▼             ▼             ▼
+           │    ┌───────────────────────────────────────┐
+           │    │              SHADER                   │
+           │    │  (uploadMat4f, uploadIntArray, etc.)  │
+           │    └───────────────────────────────────────┘
+           │                        │
+           └───────────┬────────────┘
+                       ▼
+                ┌─────────────┐
+                │ FRAMEBUFFER │
+                │  (Texture)  │
+                └──────┬──────┘
+                       │
+                       ▼
+                ┌─────────────┐
+                │   SCREEN    │
+                └─────────────┘
+
+
+|--- Summary ---|
+
+| Class       | Owns/Uses                             | Purpose                                    |
+|-------------|---------------------------------------|--------------------------------------------|
+| Window      | Scene, Framebuffer, ImGuiLayer        | Main loop, GLFW setup                      |
+| Scene       | Renderer, Camera, GameObjects         | Game state, orchestrates updates           |
+| Renderer    | RenderBatch[]                         | Groups sprites into batches                |
+| RenderBatch | Shader, Textures[], SpriteRenderers[] | One draw call for many sprites             |
+| Shader      | -                                     | GPU program for transforming/coloring      |
+| DebugDraw   | Its own Shader, VAO/VBO               | Debug lines (separate from game rendering) |
+| Framebuffer | Texture                               | Render-to-texture for ImGui viewport       |
